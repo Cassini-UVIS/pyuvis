@@ -15,6 +15,6 @@ class QUBE(object):
         self.label_fname = self.file_id + '.LBL'
         self.data_fname = self.file_id + '.DAT'
         self.data1D = (np.fromfile(self.data_fname, '>H')).astype(np.uint16)
-        labels = get_labels(self.label_fname)
-        self.shape = eval(labels['QUBE']['CORE_ITEMS'])
+        self.labels = get_labels(self.label_fname)
+        self.shape = eval(self.labels['QUBE']['CORE_ITEMS'])
         self.data = self.data1D.reshape(self.shape, order='F')
