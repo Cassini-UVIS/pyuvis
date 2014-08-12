@@ -10,6 +10,22 @@ Dependencies:
 * pypds (module: pds, PDS label reader)
 * pandas
 
+## INSTALL
+```bash
+git clone git@github.com:michaelaye/pyuvis.git
+cd pyuvis
+```
+Then if you want to keep coding in it:
+```bash
+python setup.py develop
+```
+to make any changes immediately available to your Python environment.
+Or:
+```bash
+python setup.py install
+```
+if you want a more stable install that only changes behaviour when you execute another install.
+
 ## QUBE reader
 
 Basic usage:
