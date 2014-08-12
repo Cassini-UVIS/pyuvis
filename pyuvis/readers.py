@@ -25,12 +25,12 @@ def read_idlsav_file(file):
     print("Searching for longest substructure and returning that.")
     for thiskey in tmp.keys():
         thislength = len(tmp[thiskey])
-        print("Found {} with length {}.".format(thiskey, thislength))
+        print("Found '{}'' with length {}.".format(thiskey, thislength))
         if thislength > longestlength:
             key_of_longest = thiskey
             longestlength = thislength
 
-    print("Return substructure with name {}.".format(key_of_longest))
+    print("Return substructure with name '{}'.".format(key_of_longest))
     df = pd.DataFrame.from_records(tmp[key_of_longest])
 
     #print df.dtypes.values
@@ -74,9 +74,10 @@ def read_idlsav_file(file):
     #print df.UVIS.iloc[0].dtype
     #print df.dtypes.values
 
+    # TODO: put this stuff later in o clean-up function
     # success!!
     # Now let's see if the KERNELS column actually ever has data:
-    df.KERNELS = df.KERNELS.map(check_kernels)
+    # df.KERNELS = df.KERNELS.map(check_kernels)
     ## print 'wtf', df.KERNELS.notnull().value_counts()
 
     # This means that no KERNEL data was included, so we can drop it:

@@ -20,7 +20,7 @@ class PyTest(TestCommand):
 
 setup(
     name = "pyuvis",
-    version = "0.1",
+    version = "0.2",
     packages = find_packages(),
 
     install_requires = ['pypds>=1.0'],
