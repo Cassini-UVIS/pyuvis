@@ -24,7 +24,12 @@ def read_idlsav_file(file):
     longestlength = 0
     print("Searching for longest substructure and returning that.")
     for thiskey in tmp.keys():
-        thislength = len(tmp[thiskey])
+        try:
+            thislength = len(tmp[thiskey])
+        except TypeError:
+            print("Item with key '{}' has no length. Skipping."
+                  .format(thiskey))
+            continue
         print("Found '{}'' with length {}.".format(thiskey, thislength))
         if thislength > longestlength:
             key_of_longest = thiskey
