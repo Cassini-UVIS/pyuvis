@@ -17,8 +17,8 @@ def swap_cell(cell):
     return cell.byteswap().newbyteorder()
 
 
-def read_idlsav_file(file):
-    tmp = readsav(file)
+def read_idlsav_file(filename):
+    tmp = readsav(filename)
     # find largest substructure and return that
     key_of_longest = ''
     longestlength = 0
