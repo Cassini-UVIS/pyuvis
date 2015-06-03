@@ -1,1 +1,1 @@
-from qube import QUBE
+from .io import QUBE

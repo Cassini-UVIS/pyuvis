@@ -2,11 +2,10 @@ from setuptools import setup, find_packages
 
 setup(
     name="pyuvis",
-    version="0.2",
+    version="0.3",
     packages=find_packages(),
 
-    install_requires=['pypds>=1.0'],
-    tests_require=['pytest'],
+    install_requires=['pvl'],
 
     # metadata
     author="K.-Michael Aye",
