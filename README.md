@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/michaelaye/pyuvis.svg?branch=master)](https://travis-ci.org/michaelaye/pyuvis)
+
 # pyuvis
 
 
