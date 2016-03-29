@@ -1,9 +1,12 @@
+import datetime as dt
+
+import matplotlib.pyplot as plt
 import numpy as np
-from pathlib import Path
+import pandas as pd
 import pvl
 import xarray as xr
-import pandas as pd
-import datetime as dt
+from pandas.datetools import Minute
+from pathlib import Path
 
 
 class QUBE(object):
@@ -48,10 +51,39 @@ class HSP(object):
         return dt.datetime.strptime(timestr, fmt)
 
     @property
+    def times(self):
+        return self.series.index
+
+    @property
     def series(self):
         s = pd.Series(self.ds.counts.values.ravel())
         s.index = pd.date_range(self.start_time, periods=len(s), freq=self.freq)
         return s
+
+    @property
+    def counts_per_sec(self):
+        ind = self.series.index
+        td = ind[1]-ind[0]
+        return self.series / td.total_seconds()
+
+    def get_last_minutes(self, min):
+        ind = self.series.index
+        return self.series[ind[-1]-Minute(min):]
+
+    def get_first_minutes(self, min):
+        ind = self.series.index
+        return self.series[:ind[0]+Minute(min)]
+
+    def plot_resampled_with_errors(self, binning='1s', ax=None):
+        resampled = self.counts_per_sec.resample('1s')
+        mean = resampled.mean()
+        std = resampled.std()
+        if ax is None:
+            fig, ax = plt.subplots()
+        mean.plot(yerr=std, ax=ax)
+        ax.set_xlabel('Time')
+        ax.set_ylabel('Counts per second')
+        ax.set_title("Resampled to 1 s")
 
     def __repr__(self):
         return self.ds.__repr__()
