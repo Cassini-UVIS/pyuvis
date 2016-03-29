@@ -69,7 +69,7 @@ from pyuvis.io import HSP
 hsp = HSP(fname[, freq='1ms'])
 
 # time has a real time object now, parsed from timestr
-print(hsp.timestr, hsp.time)
+print(hsp.timestr, hsp.start_time)
 
 # hsp.series is a pandas TimeSeries with correctly indexed times
 print(hsp.series.head())
