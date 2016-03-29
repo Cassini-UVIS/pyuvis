@@ -74,8 +74,18 @@ class HSP(object):
         ind = self.series.index
         return self.series[:ind[0]+Minute(min)]
 
+    @property
+    def cleaned_data_copy(self):
+        """Filtering out 0.5, 99.5 % outliers."""
+        data = self.counts_per_sec.copy()
+        min, max = np.percentile(data, (0.5, 99.5))
+        data[data < min] = np.nan
+        data[data > max] = np.nan
+        return data
+
     def plot_resampled_with_errors(self, binning='1s', ax=None):
-        resampled = self.counts_per_sec.resample('1s')
+        data = self.cleaned_data_copy
+        resampled = data.resample(binning)
         mean = resampled.mean()
         std = resampled.std()
         if ax is None:
@@ -84,6 +94,18 @@ class HSP(object):
         ax.set_xlabel('Time')
         ax.set_ylabel('Counts per second')
         ax.set_title("Resampled to 1 s")
+
+    def plot_relative_std(self, binning='1s', ax=None):
+        data = self.cleaned_data_copy
+        resampled = data.resample(binning)
+        mean = resampled.mean()
+        std = resampled.std()
+        if ax is None:
+            fig, ax = plt.subplots()
+        (std / mean).plot(ax=ax)
+        ax.set_xlabel("Time")
+        ax.set_ylabel("Relative error per resample bin.")
+        ax.set_title("Ratio of STD over mean value of resample bin.")
 
     def __repr__(self):
         return self.ds.__repr__()

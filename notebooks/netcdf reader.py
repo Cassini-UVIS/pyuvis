@@ -1,22 +1,22 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[3]:
 
 get_ipython().magic('matplotlib nbagg')
 
 
-# In[2]:
+# In[4]:
 
 fname = '/Users/klay6683/Dropbox/SternchenAndMe/UVIS_Enc_Occ_2016_03_11/HSP2016_03_11_11_48_26_000_UVIS_233EN_ICYEXO001_PIE'
 
 
-# In[3]:
+# In[5]:
 
 fname2 = '/Users/klay6683/Dropbox/SternchenAndMe/UVIS_Enc_Occ_2016_03_11/HSP2016_03_11_11_52_49_000_UVIS_233EN_ICYEXO001_PIE'
 
 
-# In[62]:
+# In[35]:
 
 import xarray as xr
 import pandas as pd
@@ -61,8 +61,18 @@ class HSP(object):
         ind = self.series.index
         return self.series[:ind[0] + datetools.Minute(min)]
 
+    @property
+    def cleaned_data_copy(self):
+        """Filtering out 0.5, 99.5 % outliers."""
+        data = self.counts_per_sec.copy()
+        min,max = np.percentile(data, (0.5, 99.5))
+        data[data < min]=np.nan
+        data[data > max] = np.nan
+        return data
+        
     def plot_resampled_with_errors(self, binning='1s', ax=None):
-        resampled = self.counts_per_sec.resample('1s')
+        data = self.cleaned_data_copy
+        resampled = data.resample(binning)
         mean = resampled.mean()
         std = resampled.std()
         if ax is None:
@@ -72,70 +82,70 @@ class HSP(object):
         ax.set_ylabel('Counts per second')
         ax.set_title("Resampled to 1 s")
         
+    def plot_relative_std(self, binning='1s', ax=None):
+        data = self.cleaned_data_copy
+        resampled = data.resample(binning)
+        mean = resampled.mean()
+        std = resampled.std()
+        if ax is None:
+            fig, ax = plt.subplots()
+        (std / mean).plot(ax=ax)
+        ax.set_xlabel("Time")
+        ax.set_ylabel("Relative error per resample bin.")
+        ax.set_title("Ratio of STD over mean value of resample bin.")
+        
     def __repr__(self):
         return self.ds.__repr__()
 
 
-# In[63]:
+# In[36]:
 
 hsp = HSP(fname)
 
 
-# In[64]:
+# In[37]:
 
 hsp.timestr
 
 
-# In[65]:
+# In[38]:
 
 hsp.times
 
 
-# In[66]:
+# In[39]:
 
 hsp.get_first_minutes(1).head()
 
 
-# In[67]:
+# In[40]:
 
 hsp.get_last_minutes(1).head()
 
 
-# In[68]:
+# In[41]:
 
 hsp.plot_resampled_with_errors()
 
 
-# In[47]:
+# In[42]:
 
-resampled = hsp.counts_per_sec.resample('1s')
-
-
-# In[37]:
-
-mean = resampled.sum()
+hsp.plot_relative_std()
 
 
-# In[38]:
-
-std = resampled.std()
-
-
-# In[39]:
-
-plt.figure()
-mean.plot()
-
-
-# In[40]:
+# In[27]:
 
 hsp.series.tail()
 
 
-# In[19]:
+# In[16]:
 
-plt.figure()
-(std/mean).plot()
+np.percentile(hsp.series, (0.5, 99.5))
+
+
+# In[18]:
+
+hsp.series.describe()
 
 
 # In[ ]:
