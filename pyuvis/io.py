@@ -44,8 +44,9 @@ class HSP(object):
     sensitivity = sens_df
 
     def __init__(self, fname, freq='1ms'):
-        self.fname = Path(fname)
-        self.ds = xr.open_dataset(fname)
+        self.path = Path(fname)
+        self.fname = str(self.path)
+        self.ds = xr.open_dataset(self.fname)
         self.freq = freq
         self.timestr = self.ds.start_time_str[:21] + '000'
 
@@ -130,7 +131,8 @@ class FUV(object):
 
     def __init__(self, fname):
         self.path = Path(fname)
-        self.ds = xr.open_dataset(str(self.path))
+        self.fname = str(self.path)
+        self.ds = xr.open_dataset(self.fname)
 
     @property
     def data(self):
