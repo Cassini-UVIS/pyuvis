@@ -5,8 +5,9 @@ import numpy as np
 import pandas as pd
 import pvl
 import xarray as xr
-from pandas.datetools import Minute
+from pandas import datetools
 from pathlib import Path
+from .hsp_sensitivity import sens_df
 
 
 class QUBE(object):
@@ -38,8 +39,12 @@ class QUBE(object):
 
 class HSP(object):
 
+    """Class for reading NetCDF UVIS HSP data files.
+    """
+    sensitivity = sens_df
+
     def __init__(self, fname, freq='1ms'):
-        self.fname = fname
+        self.fname = Path(fname)
         self.ds = xr.open_dataset(fname)
         self.freq = freq
         self.timestr = self.ds.start_time_str[:21] + '000'
@@ -63,16 +68,20 @@ class HSP(object):
     @property
     def counts_per_sec(self):
         ind = self.series.index
-        td = ind[1]-ind[0]
+        td = ind[1] - ind[0]
         return self.series / td.total_seconds()
 
     def get_last_minutes(self, min):
         ind = self.series.index
-        return self.series[ind[-1]-Minute(min):]
+        return self.series[ind[-1] - datetools.Minute(min):]
 
     def get_first_minutes(self, min):
         ind = self.series.index
-        return self.series[:ind[0]+Minute(min)]
+        return self.series[:ind[0] + datetools.Minute(min)]
+
+    @property
+    def resampled(self):
+        return self.counts_per_sec.resample('1s')
 
     @property
     def cleaned_data_copy(self):
@@ -106,6 +115,12 @@ class HSP(object):
         ax.set_xlabel("Time")
         ax.set_ylabel("Relative error per resample bin.")
         ax.set_title("Ratio of STD over mean value of resample bin.")
+
+    def save_as_csv(self):
+        to_save = self.resampled.mean()
+        tdindex = to_save.index - to_save.index[0]
+        to_save.index = tdindex.seconds
+        to_save.to_csv(str(self.fname.with_suffix('.csv')))
 
     def __repr__(self):
         return self.ds.__repr__()

@@ -2,10 +2,10 @@ from setuptools import setup, find_packages
 
 setup(
     name="pyuvis",
-    version="0.3",
+    version="0.4",
     packages=find_packages(),
 
-    install_requires=['pvl'],
+    install_requires=['pvl', 'pandas', 'xarray'],
 
     # metadata
     author="K.-Michael Aye",
