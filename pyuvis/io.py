@@ -37,13 +37,9 @@ class QUBE(object):
         self.data = self.data1D.reshape(self.shape, order='F')
 
 
-class HSP(object):
+class UVIS_NetCDF(object):
 
-    """Class for reading NetCDF UVIS HSP data files.
-    """
-    sensitivity = sens_df
-
-    def __init__(self, fname, freq='1ms'):
+    def __init__(self, fname, freq):
         self.path = Path(fname)
         self.fname = str(self.path)
         self.ds = xr.open_dataset(self.fname)
@@ -58,12 +54,27 @@ class HSP(object):
 
     @property
     def times(self):
-        return self.series.index
+        return pd.date_range(self.start_time, periods=self.n_integrations,
+                             freq=self.freq)
+
+    @property
+    def n_integrations(self):
+        return self.ds['integrations'].size
+
+
+class HSP(UVIS_NetCDF):
+
+    """Class for reading NetCDF UVIS HSP data files.
+    """
+    sensitivity = sens_df
+
+    def __init__(self, fname, freq='1ms'):
+        super().__init__(fname, freq)
 
     @property
     def series(self):
         s = pd.Series(self.ds.counts.values.ravel())
-        s.index = pd.date_range(self.start_time, periods=len(s), freq=self.freq)
+        s.index = self.times
         return s
 
     @property
@@ -127,12 +138,10 @@ class HSP(object):
         return self.ds.__repr__()
 
 
-class FUV(object):
+class FUV(UVIS_NetCDF):
 
-    def __init__(self, fname):
-        self.path = Path(fname)
-        self.fname = str(self.path)
-        self.ds = xr.open_dataset(self.fname)
+    def __init__(self, fname, freq='1s'):
+        super().__init__(fname, freq)
 
     @property
     def data(self):
