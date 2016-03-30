@@ -124,3 +124,17 @@ class HSP(object):
 
     def __repr__(self):
         return self.ds.__repr__()
+
+
+class FUV(object):
+
+    def __init__(self, fname):
+        self.path = Path(fname)
+        self.ds = xr.open_dataset(str(self.path))
+
+    @property
+    def data(self):
+        return self.ds.window_0
+
+    def __repr__(self):
+        return self.ds.__repr__()

@@ -79,3 +79,9 @@ print(hsp.series.head())
 # resample and plot in one go:
 hsp.series.resample('1s').mean().plot()
 ```
+
+## FUV reader
+
+Currently just opening via xarray and attribute `ds` carries the xarray dataset.
+And `data` provides the xarray DataArray called `window_0`, which seems to carry
+all the data.

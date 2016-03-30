@@ -1,18 +1,18 @@
 
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 fname = ("/Users/klay6683/Dropbox/SternchenAndMe/UVIS_Enc_Occ_2016_03_11"
          "/HSP2016_03_11_11_48_26_000_UVIS_233EN_ICYEXO001_PIE")
 
 
-# In[ ]:
+# In[2]:
 
 from pyuvis.io import HSP
 
 
-# In[ ]:
+# In[3]:
 
 hsp = HSP(fname, freq='2ms')
 
@@ -27,19 +27,19 @@ hsp = HSP(fname, freq='2ms')
 # This works here in the way that the `resample` command actually creates an abstract resampler that can be re-used in multiple ways with different aggregation functions, to allow maximum flexibility.
 # That's why I call the `sum()` or `mean()` function **AFTER** the `resample` call.
 
-# In[ ]:
+# In[4]:
 
 hsp.series.resample('1s').sum().head()
 
 
-# In[ ]:
+# In[5]:
 
 hsp.counts_per_sec.resample('1s').mean().head()
 
 
 # .. with the counts per seconds looking like this:
 
-# In[ ]:
+# In[6]:
 
 hsp.counts_per_sec.head()
 
