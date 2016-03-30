@@ -1,0 +1,7 @@
+doc-warnings: no
+test-warnings: no
+strictness: high
+ignore-paths:
+  - notebooks
+python-targets:
+  - 3
