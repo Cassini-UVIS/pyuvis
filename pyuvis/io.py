@@ -150,8 +150,12 @@ class HSP(UVIS_NetCDF):
 
 class FUV(UVIS_NetCDF):
 
+    waves = np.linspace(111.5, 190, 512)
+
     def __init__(self, fname, freq='1s'):
         super().__init__(fname, freq)
+        self.ds['integrations'] = self.times
+        self.ds['spectral_dim_0'] = self.waves
 
     @property
     def data(self):
