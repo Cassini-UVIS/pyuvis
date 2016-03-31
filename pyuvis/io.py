@@ -65,10 +65,22 @@ class UVIS_NetCDF(object):
 class HSP(UVIS_NetCDF):
 
     """Class for reading NetCDF UVIS HSP data files.
+
+    Parameters
+    ==========
+    fname: {str, pathlib.Path}
+        Path to file to read
+    freq: str
+        String indicating the sampling frequency, e.g. '1ms', '2ms'
+
+    Examples
+    ========
+    hsp = hsp('path', '1ms')
+
     """
     sensitivity = sens_df
 
-    def __init__(self, fname, freq='2ms'):
+    def __init__(self, fname, freq):
         super().__init__(fname, freq)
 
     @property
@@ -149,10 +161,22 @@ class HSP(UVIS_NetCDF):
 
 
 class FUV(UVIS_NetCDF):
+    """FUV NetCDF reader class.
 
+    Parameters
+    ==========
+    fname: {str, pathlib.Path}
+        Path to file to read
+    freq: str
+        String indicating the sampling frequency, e.g. '1s', '2s'
+
+    Examples
+    ========
+    fuv = FUV('path', '1s')
+    """
     waves = np.linspace(111.5, 190, 512)
 
-    def __init__(self, fname, freq='1s'):
+    def __init__(self, fname, freq):
         super().__init__(fname, freq)
         self.ds['integrations'] = self.times
         self.ds['spectral_dim_0'] = self.waves
