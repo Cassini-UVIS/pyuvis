@@ -68,8 +68,18 @@ class HSP(UVIS_NetCDF):
     """
     sensitivity = sens_df
 
-    def __init__(self, fname, freq='1ms'):
+    def __init__(self, fname, freq='2ms'):
         super().__init__(fname, freq)
+
+    @property
+    def n_integrations(self):
+        return self.ds.counts.size
+
+    @property
+    def times(self):
+        """HSP times are different in that one needs to stack all rows."""
+        return pd.date_range(self.start_time, periods=self.n_integrations,
+                             freq=self.freq)
 
     @property
     def series(self):
