@@ -4,9 +4,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pvl
+import seaborn as sns
 import xarray as xr
 from pandas import datetools
 from pathlib import Path
+
 from .hsp_sensitivity import sens_df
 
 try:
@@ -196,32 +198,61 @@ class FUV(UVIS_NetCDF):
     def data(self):
         return self.ds.counts
 
+    @property
+    def plotfolder(self):
+        f = self.path.parent / 'plots'
+        f.mkdir(exist_ok=True)
+        return f
+
     def save_spectograms(self):
-        savefolder = self.path.parent / 'plots'
-        savefolder.mkdir(exist_ok=True)
-        vmax = self.data.max()
+        sns.set_context('talk')
+        vmax = self.data.max()*1.05
         for i, spec in enumerate(self.data):
             fig, ax = plt.subplots()
             spec.plot(ax=ax, vmax=vmax)
             fig.tight_layout()
             fname = "spectogram_{}.png".format(str(i).zfill(4))
-            savepath = str(savefolder / fname)
+            savepath = str(self.plotfolder / fname)
             fig.savefig(savepath, dpi=150)
             plt.close(fig)
-        self.savefolder = savefolder
-        print("Saved spectrograms in ", savefolder)
+        print("Saved spectrograms in", self.plotfolder)
+
+    def _run_ffmpy(self, inputs, output_name):
+        opts = '-framerate 3 -y'
+        output_options = '-c:v libx264 -pix_fmt yuv420p'
+        outputs = {str(self.plotfolder / output_name): output_options}
+        ff = ffmpy.FF(global_options=opts, inputs=inputs, outputs=outputs)
+        print("Running", ff.cmd_str)
+        ff.run()
 
     def create_spectogram_movie(self):
         if not _FFMPY_INSTALLED:
             print("ffmpy is not installed: 'pip install ffmpy'.")
             return
-        opts = '-framerate 3 -y'
-        inputs = {str(self.savefolder / 'spectogram_%04d.png'):None}
-        output_options = '-c:v libx264 -pix_fmt yuv420p'
-        outputs = {str(self.savefolder / 'spectograms.mp4'): output_options}
-        ff = ffmpy.FF(global_options=opts, inputs=inputs, outputs=outputs)
-        print("Running", ff.cmd_str)
-        ff.run()
+        inputs = {str(self.plotfolder / 'spectogram_%04d.png'): None}
+        self._run_ffmpy(inputs, 'spectograms.mp4')
+
+    def save_spectrums(self):
+        "plotting spectrums over time summing all pixels"
+        sns.set_context('talk')
+        vmax = self.data.sum('pixels').max()*1.05
+        for i, spec in enumerate(self.data.sum('pixels')):
+            fig, ax = plt.subplots()
+            spec.plot()
+            ax.set_ylim(0, vmax)
+            fig.tight_layout()
+            fname = "summed_spectrum_{}.png".format(str(i).zfill(4))
+            savepath = str(self.plotfolder / fname)
+            fig.savefig(savepath, dpi=150)
+            plt.close(fig)
+        print("Saved spectrums in", self.plotfolder)
+
+    def create_spec_time_sequence_movie(self):
+        if not _FFMPY_INSTALLED:
+            print("ffmpy is not installed: 'pip install ffmpy'.")
+            return
+        inputs = {str(self.plotfolder / 'summed_spectrum_%04d.png'): None}
+        self._run_ffmpy(inputs, 'summed_spectrums.mp4')
 
     def __repr__(self):
         return self.ds.__repr__()

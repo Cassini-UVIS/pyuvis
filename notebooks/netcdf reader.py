@@ -103,45 +103,75 @@ hsp.series.describe()
 
 # # FUV
 
-# In[259]:
+# In[1]:
 
 from pathlib import Path
 from pyuvis.io import FUV, HSP
 
 
-# In[260]:
+# In[2]:
 
 folder = Path('/Users/klay6683/Dropbox/SternchenAndMe/UVIS_Enc_Occ_2016_03_11')
 
 
-# In[261]:
+# In[3]:
 
 fuvfiles = list(folder.glob('*FUV*'))
 
 
-# In[262]:
+# In[4]:
 
 fuvfiles[0]
 
 
-# In[263]:
+# In[5]:
 
 fuv = FUV(fuvfiles[0])
 
 
-# In[264]:
+# In[6]:
 
 fuv
 
 
-# In[266]:
+# In[7]:
+
+get_ipython().magic('matplotlib inline')
+
+
+# In[20]:
+
+fuv.data.sum(['wavelengths','pixels']).plot()
+
+
+# In[8]:
+
+fuv.save_spectrums()
+
+
+# In[9]:
+
+fuv.create_spec_time_sequence_movie()
+
+
+# In[10]:
 
 fuv.save_spectograms()
 
 
-# In[267]:
+# In[11]:
 
 fuv.create_spectogram_movie()
+
+
+# In[19]:
+
+fuv.data[23].sum('pixels').plot()
+
+
+# In[20]:
+
+fuv.data[23].sum('pixels').max()
 
 
 # In[205]:
