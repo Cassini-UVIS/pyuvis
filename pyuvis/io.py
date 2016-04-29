@@ -9,6 +9,12 @@ from pandas import datetools
 from pathlib import Path
 from .hsp_sensitivity import sens_df
 
+try:
+    import ffmpy
+    _FFMPY_INSTALLED = True
+except ImportError:
+    _FFMPY_INSTALLED = False
+
 
 class QUBE(object):
 
@@ -54,8 +60,9 @@ class UVIS_NetCDF(object):
 
     @property
     def times(self):
-        return pd.date_range(self.start_time, periods=self.n_integrations,
-                             freq=self.freq)
+        times = pd.date_range(self.start_time, periods=self.n_integrations,
+                              freq=self.freq)
+        return times
 
     @property
     def n_integrations(self):
@@ -161,6 +168,7 @@ class HSP(UVIS_NetCDF):
 
 
 class FUV(UVIS_NetCDF):
+
     """FUV NetCDF reader class.
 
     Parameters
@@ -176,14 +184,44 @@ class FUV(UVIS_NetCDF):
     """
     waves = np.linspace(111.5, 190, 512)
 
-    def __init__(self, fname, freq):
+    def __init__(self, fname, freq='1s'):
         super().__init__(fname, freq)
-        self.ds['integrations'] = self.times
-        self.ds['spectral_dim_0'] = self.waves
+        self.ds['times'] = xr.DataArray(self.times.values, dims='integrations')
+        self.ds['wavelengths'] = xr.DataArray(self.waves, dims='spectral_dim_0')
+        self.ds = self.ds.swap_dims({'integrations': 'times',
+                                     'spectral_dim_0': 'wavelengths'})
+        self.ds = self.ds.rename({'window_0': 'counts', 'spatial_dim_0': 'pixels'})
 
     @property
     def data(self):
-        return self.ds.window_0
+        return self.ds.counts
+
+    def save_spectograms(self):
+        savefolder = self.path.parent / 'plots'
+        savefolder.mkdir(exist_ok=True)
+        vmax = self.data.max()
+        for i, spec in enumerate(self.data):
+            fig, ax = plt.subplots()
+            spec.plot(ax=ax, vmax=vmax)
+            fig.tight_layout()
+            fname = "spectogram_{}.png".format(str(i).zfill(4))
+            savepath = str(savefolder / fname)
+            fig.savefig(savepath, dpi=150)
+            plt.close(fig)
+        self.savefolder = savefolder
+        print("Saved spectrograms in ", savefolder)
+
+    def create_spectogram_movie(self):
+        if not _FFMPY_INSTALLED:
+            print("ffmpy is not installed: 'pip install ffmpy'.")
+            return
+        opts = '-framerate 3 -y'
+        inputs = {str(self.savefolder / 'spectogram_%04d.png'):None}
+        output_options = '-c:v libx264 -pix_fmt yuv420p'
+        outputs = {str(self.savefolder / 'spectograms.mp4'): output_options}
+        ff = ffmpy.FF(global_options=opts, inputs=inputs, outputs=outputs)
+        print("Running", ff.cmd_str)
+        ff.run()
 
     def __repr__(self):
         return self.ds.__repr__()

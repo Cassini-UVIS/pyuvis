@@ -3,351 +3,98 @@
 
 # # FUV
 
-# In[ ]:
+# In[1]:
 
 from pathlib import Path
-from pyuvis.io import FUV, HSP
+from pyuvis.io import FUV, HSP, UVIS_NetCDF
 
 
-# In[ ]:
+# In[2]:
 
 folder = Path('/Users/klay6683/Dropbox/SternchenAndMe/UVIS_Enc_Occ_2016_03_11')
 
 
-# In[ ]:
+# In[3]:
 
 fuvfiles = list(folder.glob('*FUV*'))
 
 
-# In[ ]:
+# In[4]:
 
 fuvfiles[0]
 
 
-# In[ ]:
+# In[5]:
 
 fuv = FUV(fuvfiles[0])
 
 
-# In[ ]:
+# In[6]:
 
-get_ipython().magic('matplotlib nbagg')
+fuv.data
 
 
-# In[ ]:
+# In[24]:
+
+get_ipython().magic('matplotlib inline')
+
+
+# In[25]:
+
+import seaborn as sns
+sns.set_context('notebook')
+
+
+# In[26]:
+
+fig, ax = plt.subplots(figsize=(8,6))
+fuv.data[:,0].plot(ax=ax)
+fig.tight_layout()
+
+
+# In[28]:
 
 fuv.data[:, 1, 100].plot()
+plt.tight_layout()
 
 
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-fuv.ds['integrations'] = fuv.times
-
-
-# In[ ]:
-
-fuv.ds
-
-
-# In[ ]:
-
-fuv.ds.reset_coords().set_coords('times')
-
-
-# In[ ]:
-
-fuv.data.attrs
-
-
-# In[ ]:
-
-fuv.data.dims
-
-
-# In[ ]:
-
-data = fuv.data
-
-
-# In[ ]:
-
-fuv.ds
-
-
-# In[ ]:
-
-fuv.ds['times'] = fuv.times
-
-
-# In[ ]:
-
-fuv.ds.reset_coords()
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-newfuv = fuv.ds.drop('integrations')
-
-
-# In[ ]:
-
-get_ipython().magic('matplotlib nbagg')
-
-
-# In[ ]:
-
-newfuv
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
+# In[30]:
 
 plt.figure()
-fuv.data.mean(['spatial_dim_0', 'spectral_dim_0']).plot()
+fuv.data.mean(['spatial_dim_0', 'wavelengths']).plot()
 
 
-# In[ ]:
+# In[31]:
 
 spec = fuv.data[100]
 
 
-# In[ ]:
+# In[32]:
+
+spec
+
+
+# In[34]:
 
 p = Path('./plots')
 
 
-# In[ ]:
-
-waves = np.linspace(111.5, 190, 512)
-
-
-# In[ ]:
-
-import xarray as xr
-
-
-# In[ ]:
-
-xrwaves = xr.DataArray(waves, dims=['wavelength'])
-
-
-# In[ ]:
-
-data.coords
-
-
-# In[ ]:
-
-data.dims
-
-
-# In[ ]:
-
-data['spectral_dim_0'] = xrwaves
-
-
-# In[ ]:
-
-data
-
-
-# In[ ]:
+# In[35]:
 
 plt.figure()
-data[0][1].plot()
+fuv.data[0][1].plot()
 
 
-# In[ ]:
-
-data['times'] = fuv.times
-
-
-# In[ ]:
-
-data
-
-
-# In[ ]:
+# In[36]:
 
 plt.figure()
-data[:,1,100].plot()
+fuv.data[:,1,100].plot()
 
 
-# In[ ]:
-
-data.coords
-
-
-# In[ ]:
-
-data.dims
-
-
-# In[ ]:
-
-data['integrations'] = fuv.times
-
-
-# In[ ]:
-
-data.coords
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-data = np.random.rand(4, 3)
-
-locs = ['IA', 'IL', 'IN']
-
-times = pd.date_range('2000-01-01', periods=4)
-
-foo = xr.DataArray(data, coords=[times, locs], dims=['time', 'space'])
-
-foo
-
-
-# In[ ]:
-
-foo.dims
-
-
-# In[ ]:
-
-foo.coords
-
-
-# In[ ]:
-
-xr.DataArray(fuv.data, coords=[fuv.data.integrations,
-                               fuv.data.spatial_dim_0])
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-fuv.ds.update({'wind':xrwaves})
-
-
-# In[ ]:
-
-newz = xr.DataArray(np.random.randn(3), [('y', [10,20,30])])
-newz
-
-
-# In[ ]:
-
-xr.concat([arr, newz], dim='x')
-
-
-# In[ ]:
-
-arr
-
-
-# In[ ]:
-
-newz
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-for i,spec in enumerate(fuv.data):
-    print(i)
-    fig, ax = plt.subplots()
-    ax.plot(xrwaves, spec[1])
-    ax.set_ylim((0,72))
-    fig.savefig("plots/spec_{}.png".format(str(i).zfill(3)), dpi=150)
-    plt.close(fig)
-
-
-# In[ ]:
-
-spec[1]
-
-
-# In[ ]:
-
-import xarray as xr
-
-
-# In[ ]:
-
-waves = xr.DataArray(waves, dims=['wavelength'])
-
-
-# In[ ]:
-
-fuv.data.spectral_dim_0 = waves
-
-
-# In[ ]:
+# In[40]:
 
 plt.figure()
-fuv.data.sum(['spectral_dim_0'])[:, 1].plot()
-
-
-# In[ ]:
-
-spec.spectral_dim_0 = waves
-
-
-# In[ ]:
-
-waves
-
-
-# In[ ]:
-
-np.percentile(fuv.data, 1.5)
-
-
-# In[ ]:
-
-fuv.data[0].plot
-
-
-# In[ ]:
-
-plt.figure()
-hsp.resampled.mean().plot()
+fuv.data.sum(['wavelengths'])[:, 1].plot()
 
 
 # In[ ]:

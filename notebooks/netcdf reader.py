@@ -1,185 +1,190 @@
 
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 get_ipython().magic('matplotlib nbagg')
 
 
-# In[ ]:
+# In[2]:
 
 fname = '/Users/klay6683/Dropbox/SternchenAndMe/UVIS_Enc_Occ_2016_03_11/HSP2016_03_11_11_48_26_000_UVIS_233EN_ICYEXO001_PIE'
 
 
-# In[ ]:
+# In[3]:
 
 from pyuvis.io import HSP
 
 
-# In[ ]:
+# In[4]:
 
 HSP.sensitivity.plot()
 
 
-# In[ ]:
+# In[6]:
 
 hsp = HSP(fname, freq='2ms')
 
 
-# In[ ]:
+# In[7]:
 
 hsp.timestr
 
 
-# In[ ]:
+# In[8]:
 
 hsp
 
 
-# In[ ]:
+# In[9]:
 
 hsp.fname
 
 
-# In[ ]:
+# In[10]:
 
 hsp.times
 
 
-# In[ ]:
+# In[11]:
 
 hsp.get_first_minutes(1).head()
 
 
-# In[ ]:
+# In[12]:
 
 hsp.get_last_minutes(1).head()
 
 
-# In[ ]:
+# In[13]:
 
 resampled = hsp.cleaned_data_copy
 
 
-# In[ ]:
+# In[14]:
 
 resampled = resampled.resample('1s').mean()
 
 
-# In[ ]:
+# In[15]:
 
 last_minute = hsp.get_last_minutes(1)
 
 
-# In[ ]:
+# In[16]:
 
 last_minute.resample('1s').mean().plot()
 
 
-# In[ ]:
+# In[17]:
 
 hsp.plot_resampled_with_errors()
 
 
-# In[ ]:
+# In[18]:
 
 hsp.plot_relative_std()
 
 
-# In[ ]:
+# In[31]:
 
 hsp.series.tail()
 
 
-# In[ ]:
+# In[19]:
 
 np.percentile(hsp.series, (0.5, 99.5))
 
 
-# In[ ]:
+# In[20]:
 
 hsp.series.describe()
 
 
 # # FUV
 
-# In[ ]:
+# In[259]:
 
 from pathlib import Path
 from pyuvis.io import FUV, HSP
 
 
-# In[ ]:
+# In[260]:
 
 folder = Path('/Users/klay6683/Dropbox/SternchenAndMe/UVIS_Enc_Occ_2016_03_11')
 
 
-# In[ ]:
+# In[261]:
 
 fuvfiles = list(folder.glob('*FUV*'))
 
 
-# In[ ]:
+# In[262]:
 
 fuvfiles[0]
 
 
-# In[ ]:
+# In[263]:
 
 fuv = FUV(fuvfiles[0])
 
 
-# In[ ]:
+# In[264]:
 
 fuv
 
 
-# In[ ]:
+# In[266]:
 
-obj = fuv.data[:, 1].sum('spectral_dim_0')
+fuv.save_spectograms()
 
 
-# In[ ]:
+# In[267]:
+
+fuv.create_spectogram_movie()
+
+
+# In[205]:
+
+obj = fuv.data[:, 1].sum('wavelengths')
+
+
+# In[206]:
 
 fuvdata = obj.to_series()
 low = np.percentile(fuvdata, 0.5)
 fuvdata[fuvdata< low] = np.nan
 
 
-# In[ ]:
+# In[207]:
 
 fuvdata = fuvdata/fuvdata[10:75].mean()
 
 
-# In[ ]:
+# In[208]:
 
 fuvt0 = fuvdata.index[10]
 fuvt1 = fuvdata.index[74]
 
 
-# In[ ]:
-
-resampled.shape
-
-
-# In[ ]:
+# In[116]:
 
 t0_I0 = '2016-03-11 11:51:25'
 t1_I0 = '2016-03-11 11:52:00'
 I0 = resampled[t0_I0:t1_I0].mean()
 
 
-# In[ ]:
+# In[57]:
 
 resampled = resampled / I0
 
 
-# In[ ]:
+# In[63]:
 
 t0 = '2016-03-11 11:51:50'
 
 
-# In[ ]:
+# In[152]:
 
 fig, ax = plt.subplots()
 resampled.plot(ax=ax, label='HSP', legend=True, lw=1.5)
@@ -194,7 +199,7 @@ ax.set_title(r"Normalized, HSP vs FUV, showing $I_0$ regions")
 plt.savefig("HSP_FUV_all_data.pdf")
 
 
-# In[ ]:
+# In[159]:
 
 fig, ax = plt.subplots()
 toplot = resampled[t0:].shift(0)
@@ -211,255 +216,137 @@ ax.legend()
 fig.savefig("HSP_FUV_comparison_last_50s.pdf")
 
 
-# In[ ]:
+# In[12]:
 
 fuv.data
 
 
-# In[ ]:
+# In[13]:
 
 fuv.data.coords
 
 
-# In[ ]:
+# In[14]:
 
 fuv.data.attrs
 
 
-# In[ ]:
+# In[40]:
 
 fuv.data.dims
 
 
-# In[ ]:
+# In[15]:
 
 data = fuv.data
 
 
-# In[ ]:
+# In[16]:
 
 fuv.times
 
 
-# In[ ]:
+# In[17]:
 
 hsp.times
 
 
-# In[ ]:
+# In[44]:
 
 hsp.n_integrations
 
 
-# In[ ]:
+# In[45]:
 
 hsp
 
 
-# In[ ]:
+# In[209]:
 
 fuv.data
 
 
-# In[ ]:
-
-fuv.data.sel(integrations=0).mean()
-
-
-# In[ ]:
-
-plt.figure()
-fuv.data.mean(['spatial_dim_0', 'spectral_dim_0']).plot()
-
-
-# In[ ]:
-
-spec = fuv.data[100]
-
-
-# In[ ]:
+# In[210]:
 
 get_ipython().magic('matplotlib inline')
 
 
-# In[ ]:
-
-p = Path('./plots')
-
-
-# In[ ]:
-
-waves = np.linspace(111.5, 190, 512)
-
-
-# In[ ]:
-
-import xarray as xr
-
-
-# In[ ]:
-
-xrwaves = xr.DataArray(waves, dims=['wavelength'])
-
-
-# In[ ]:
-
-fuv.data.coords
-
-
-# In[ ]:
-
-fuv.data.dims
-
-
-# In[ ]:
-
-xr.DataArray(fuv.data, coords=[fuv.data.integrations,
-                               fuv.data.spatial_dim_0,
-                               fuv.data.spectral_dim_0])
-
-
-# In[ ]:
-
-fuv.data.coords
-
-
-# In[ ]:
-
-fuv.data.dims
-
-
-# In[ ]:
-
-data = np.random.rand(4, 3)
-
-locs = ['IA', 'IL', 'IN']
-
-times = pd.date_range('2000-01-01', periods=4)
-
-foo = xr.DataArray(data, coords=[times, locs], dims=['time', 'space'])
-
-foo
-
-
-# In[ ]:
-
-foo.dims
-
-
-# In[ ]:
-
-foo.coords
-
-
-# In[ ]:
-
-xr.DataArray(fuv.data, coords=[fuv.data.integrations,
-                               fuv.data.spatial_dim_0])
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-fuv.ds.update({'wind':xrwaves})
-
-
-# In[ ]:
-
-newz = xr.DataArray(np.random.randn(3), [('y', [10,20,30])])
-newz
-
-
-# In[ ]:
-
-xr.concat([arr, newz], dim='x')
-
-
-# In[ ]:
-
-arr
-
-
-# In[ ]:
-
-newz
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-for i,spec in enumerate(fuv.data):
-    print(i)
-    fig, ax = plt.subplots()
-    ax.plot(xrwaves, spec[1])
-    ax.set_ylim((0,72))
-    fig.savefig("plots/spec_{}.png".format(str(i).zfill(3)), dpi=150)
-    plt.close(fig)
-
-
-# In[ ]:
-
-spec[1]
-
-
-# In[ ]:
-
-import xarray as xr
-
-
-# In[ ]:
-
-waves = xr.DataArray(waves, dims=['wavelength'])
-
-
-# In[ ]:
-
-fuv.data.spectral_dim_0 = waves
-
-
-# In[ ]:
+# In[211]:
 
 plt.figure()
-fuv.data.sum(['spectral_dim_0'])[:, 1].plot()
+fuv.data.mean(['pixels', 'wavelengths']).plot()
 
 
-# In[ ]:
+# In[24]:
 
-spec.spectral_dim_0 = waves
-
-
-# In[ ]:
-
-waves
+get_ipython().magic('matplotlib inline')
 
 
-# In[ ]:
+# In[183]:
 
-np.percentile(fuv.data, 1.5)
+class UpdateQuad(object):
+
+    def __init__(self, ax, data):
+        self.ax = ax
+        self.data = data
+        self.quad = data[0].plot(vmax=72)
+
+    def init(self):
+        print('update init')
+        self.quad.set_array(np.asarray([]))
+        return self.quad
+
+    def __call__(self, i):
+        # data at time i
+        ti = self.data[i]
+        self.ax.clear()
+#         self.quad.set_array(ti.data.ravel())
+#         return self.quad
+        return ti.plot(ax=self.ax)
 
 
-# In[ ]:
+fig, ax = plt.subplots()
+ud = UpdateQuad(ax, fuv.data)
+anim = animation.FuncAnimation(fig, ud, init_func=ud.init,
+                               frames=10, blit=False)
+anim.save('spectrograms2.mp4')
 
-fuv.data[0].plot
+
+# In[269]:
+
+wavemeans = fuv.data.mean('wavelengths')
 
 
-# In[ ]:
+# In[280]:
 
-plt.figure()
-hsp.resampled.mean().plot()
+wavemeans.pixels
+
+
+# In[284]:
+
+plt.figure(figsize=(10,8))
+for pix in [0,2,3,4]:
+    (wavemeans[:, pix]/wavemeans[:, 1]).plot(label='pix %i' %pix)
+plt.legend()
+plt.title("Pixel signal relative to pixel 1")
+
+
+# In[294]:
+
+data.max().values
+
+
+# In[312]:
+
+data += 1e-
+
+
+# In[307]:
+
+from matplotlib.colors import LogNorm
+data = fuv.data[100]
+norm = LogNorm(vmin=1e-5, vmax=47)
+data.plot(norm=norm)
 
 
 # In[ ]:
