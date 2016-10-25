@@ -191,13 +191,15 @@ class FUV(UVIS_NetCDF):
 
     def __init__(self, fname, mode, freq='1s'):
         super().__init__(fname, freq)
-        if mode == 'solar':
+        if mode == 'stellar':
             self.n_spec_bins = 512
-        elif mode == 'stellar':
+        elif mode == 'solar':
             self.n_spec_bins == 1024
-            self.waves = np.linspace(self.wave_min,
-                                     self.wave_max,
-                                     self.n_spec_bins)
+        else:
+            raise ValueError("'mode' has to be either 'stellar' or 'solar'.")
+        self.waves = np.linspace(self.wave_min,
+                                 self.wave_max,
+                                 self.n_spec_bins)
         self.ds['times'] = xr.DataArray(self.times.values, dims='integrations')
         self.ds['wavelengths'] = xr.DataArray(self.waves, dims='spectral_dim_0')
         self.ds = self.ds.swap_dims({'integrations': 'times',
