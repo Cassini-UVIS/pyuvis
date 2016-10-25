@@ -194,7 +194,7 @@ class FUV(UVIS_NetCDF):
         if mode == 'stellar':
             self.n_spec_bins = 512
         elif mode == 'solar':
-            self.n_spec_bins == 1024
+            self.n_spec_bins = 1024
         else:
             raise ValueError("'mode' has to be either 'stellar' or 'solar'.")
         self.waves = np.linspace(self.wave_min,
