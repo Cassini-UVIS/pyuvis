@@ -175,19 +175,29 @@ class FUV(UVIS_NetCDF):
 
     Parameters
     ==========
-    fname: {str, pathlib.Path}
+    fname: str or pathlib.Path
         Path to file to read
+    mode: {'stellar', 'solar'}
+        Observation mode that controls the spectral binning
     freq: str
         String indicating the sampling frequency, e.g. '1s', '2s'
 
     Examples
     ========
-    fuv = FUV('path', '1s')
+    fuv = FUV('path', 'stellar', '1s')
     """
-    waves = np.linspace(111.5, 190, 512)
+    wave_min = 111.5  # nm
+    wave_max = 190.0  # nm
 
-    def __init__(self, fname, freq='1s'):
+    def __init__(self, fname, mode, freq='1s'):
         super().__init__(fname, freq)
+        if mode == 'solar':
+            self.n_spec_bins = 512
+        elif mode == 'stellar':
+            self.n_spec_bins == 1024
+            self.waves = np.linspace(self.wave_min,
+                                     self.wave_max,
+                                     self.n_spec_bins)
         self.ds['times'] = xr.DataArray(self.times.values, dims='integrations')
         self.ds['wavelengths'] = xr.DataArray(self.waves, dims='spectral_dim_0')
         self.ds = self.ds.swap_dims({'integrations': 'times',
