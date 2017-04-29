@@ -44,7 +44,6 @@ class QUBE(object):
         # reshape the data with infos from label
         self.data = self.data1D.reshape(self.shape, order='F')
 
-
 class UVIS_NetCDF(object):
 
     def __init__(self, fname, freq):
@@ -70,6 +69,7 @@ class UVIS_NetCDF(object):
     def n_integrations(self):
         return self.ds['integrations'].size
 
+        
 
 class HSP(UVIS_NetCDF):
 
@@ -145,7 +145,7 @@ class HSP(UVIS_NetCDF):
         mean.plot(yerr=std, ax=ax)
         ax.set_xlabel('Time')
         ax.set_ylabel('Counts per second')
-        ax.set_title("Resampled to 1 s")
+        ax.set_title(f"Resampled to {binning} s")
 
     def plot_relative_std(self, binning='1s', ax=None):
         data = self.cleaned_data_copy
@@ -189,14 +189,9 @@ class FUV(UVIS_NetCDF):
     wave_min = 111.5  # nm
     wave_max = 190.0  # nm
 
-    def __init__(self, fname, mode, freq='1s'):
+    def __init__(self, fname, freq='1s'):
         super().__init__(fname, freq)
-        if mode == 'stellar':
-            self.n_spec_bins = 512
-        elif mode == 'solar':
-            self.n_spec_bins = 1024
-        else:
-            raise ValueError("'mode' has to be either 'stellar' or 'solar'.")
+        self.n_spec_bins =  self.ds['spectral_dim_0'].size
         self.waves = np.linspace(self.wave_min,
                                  self.wave_max,
                                  self.n_spec_bins)
