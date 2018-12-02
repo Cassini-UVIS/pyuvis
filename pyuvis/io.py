@@ -1,4 +1,5 @@
 import datetime as dt
+from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,7 +8,6 @@ import pvl
 import seaborn as sns
 import xarray as xr
 from pandas import datetools
-from pathlib import Path
 
 from .hsp_sensitivity import sens_df
 
@@ -28,10 +28,10 @@ class QUBE(object):
         self.data_fname = self.path.with_suffix('.DAT')
 
         # read the data
-        self.data1D = (np.fromfile(self.data_fname, '>H')).astype(np.uint16)
+        self.data1D = (np.fromfile(str(self.data_fname), '>H')).astype(np.uint16)
 
         # label stuff
-        self.label = pvl.load(self.label_fname)
+        self.label = pvl.load(str(self.label_fname))
         self.cubelabel = self.label['QUBE']
         self.LINE_BIN = self.cubelabel['LINE_BIN']
         self.BAND_BIN = self.cubelabel['BAND_BIN']
@@ -43,6 +43,7 @@ class QUBE(object):
 
         # reshape the data with infos from label
         self.data = self.data1D.reshape(self.shape, order='F')
+
 
 class UVIS_NetCDF(object):
 
@@ -69,7 +70,6 @@ class UVIS_NetCDF(object):
     def n_integrations(self):
         return self.ds['integrations'].size
 
-        
 
 class HSP(UVIS_NetCDF):
 
@@ -191,7 +191,7 @@ class FUV(UVIS_NetCDF):
 
     def __init__(self, fname, freq='1s'):
         super().__init__(fname, freq)
-        self.n_spec_bins =  self.ds['spectral_dim_0'].size
+        self.n_spec_bins = self.ds['spectral_dim_0'].size
         self.waves = np.linspace(self.wave_min,
                                  self.wave_max,
                                  self.n_spec_bins)
