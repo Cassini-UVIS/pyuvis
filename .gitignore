@@ -55,3 +55,7 @@ docs/_build/
 *.sublime-workspace
 
 \.vscode/
+
+notebooks/plots/
+
+notebooks/\.ipynb_checkpoints/
