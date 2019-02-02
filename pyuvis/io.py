@@ -142,12 +142,12 @@ class HSP(UVIS_NetCDF):
         return self.series / td.total_seconds()
 
     def get_last_minutes(self, min):
-        return "Currently not implemented"
+        raise NotImplementedError("get_last_minutes currently not implemented")
         # ind = self.series.index
         # return self.series[ind[-1] - datetools.Minute(min) :]
 
     def get_first_minutes(self, min):
-        return "Currently not implemented."
+        raise NotImplementedError("get_first_minutes currently not implemented.")
         # ind = self.series.index
         # return self.series[: ind[0] + datetools.Minute(min)]
 
