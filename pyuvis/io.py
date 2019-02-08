@@ -62,7 +62,7 @@ class QUBE(object):
 
     @property
     def xarray(self):
-        da = xr.DataArray(self.data)
+        return xr.DataArray(self.data)
 
 
 class FUV_PDS(QUBE):
@@ -78,6 +78,7 @@ class UVIS_NetCDF(object):
         self.freq = freq
         self.timestr = self.ds.start_time_str[:20] + "000"
         self.n_integrations = self.ds["integrations"].size
+        self.orig_dims = list(self.ds.dims.keys())
 
     @property
     def start_time(self):
@@ -95,6 +96,18 @@ class UVIS_NetCDF(object):
             self.start_time, periods=self.n_integrations, freq=self.freq
         )
         return times
+
+    @property
+    def spatial_dim(self):
+        for dim in self.orig_dims:
+            if dim.startswith("spatial_dim"):
+                return dim
+
+    @property
+    def spectral_dim(self):
+        for dim in self.orig_dims:
+            if dim.startswith("spectral_dim"):
+                return dim
 
 
 class HSP(UVIS_NetCDF):
@@ -222,14 +235,14 @@ class FUV(UVIS_NetCDF):
 
     def __init__(self, fname, freq="1s"):
         super().__init__(fname, freq)
-        self.n_spec_bins = self.ds["spectral_dim_0"].size
+        self.n_spec_bins = self.ds[self.spectral_dim].size
         self.waves = np.linspace(self.wave_min, self.wave_max, self.n_spec_bins)
         self.ds["times"] = xr.DataArray(self.times.values, dims="integrations")
-        self.ds["wavelengths"] = xr.DataArray(self.waves, dims="spectral_dim_0")
+        self.ds["wavelengths"] = xr.DataArray(self.waves, dims=self.spectral_dim)
         self.ds = self.ds.swap_dims(
-            {"integrations": "times", "spectral_dim_0": "wavelengths"}
+            {"integrations": "times", self.spectral_dim: "wavelengths"}
         )
-        self.ds = self.ds.rename({"window_0": "counts", "spatial_dim_0": "pixels"})
+        self.ds = self.ds.rename({"window_0": "counts", self.spatial_dim: "pixels"})
 
     @property
     def data(self):
