@@ -76,13 +76,18 @@ class UVIS_NetCDF(object):
         self.fname = str(self.path)
         self.ds = xr.open_dataset(self.fname)
         self.freq = freq
-        self.timestr = self.ds.start_time_str[:21] + "000"
+        self.timestr = self.ds.start_time_str[:20] + "000"
+        self.n_integrations = self.ds["integrations"].size
 
     @property
     def start_time(self):
         timestr = self.timestr
-        fmt = "%Y-%j %H:%M:%S.%f"
-        return dt.datetime.strptime(timestr, fmt)
+        try:
+            fmt = "%Y-%j %H:%M:%S.%f"
+            return dt.datetime.strptime(timestr, fmt)
+        except ValueError:
+            fmt = "%Y-%jT%H:%M:%S.%f"
+            return dt.datetime.strptime(timestr, fmt)
 
     @property
     def times(self):
@@ -90,10 +95,6 @@ class UVIS_NetCDF(object):
             self.start_time, periods=self.n_integrations, freq=self.freq
         )
         return times
-
-    @property
-    def n_integrations(self):
-        return self.ds["integrations"].size
 
 
 class HSP(UVIS_NetCDF):
