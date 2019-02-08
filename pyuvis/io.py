@@ -149,7 +149,7 @@ class HSP(UVIS_NetCDF):
     def get_first_minutes(self, min):
         raise NotImplementedError("get_first_minutes currently not implemented.")
         # ind = self.series.index
-        # return self.series[: ind[0] + datetools.Minute(min)]
+        # return self.series[: ind[0] + pd.Minute(min)]
 
     @property
     def resampled(self):
