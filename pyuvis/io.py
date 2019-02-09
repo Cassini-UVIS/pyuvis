@@ -77,7 +77,6 @@ class UVIS_NetCDF(object):
         self.ds = xr.open_dataset(self.fname)
         self.freq = freq
         self.timestr = self.ds.start_time_str[:20] + "000"
-        self.n_integrations = self.ds["integrations"].size
         self.orig_dims = list(self.ds.dims.keys())
 
     @property
@@ -235,6 +234,7 @@ class FUV(UVIS_NetCDF):
 
     def __init__(self, fname, freq="1s"):
         super().__init__(fname, freq)
+        self.n_integrations = self.ds["integrations"].size
         self.n_spec_bins = self.ds[self.spectral_dim].size
         self.waves = np.linspace(self.wave_min, self.wave_max, self.n_spec_bins)
         self.ds["times"] = xr.DataArray(self.times.values, dims="integrations")
