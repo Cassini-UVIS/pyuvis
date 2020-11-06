@@ -151,7 +151,6 @@ class FUV_PDS(UV_PDS):
         # If calibration matrix file was not present (loaded by the superclass)
         # then set to default wavelength range for FUV.
         if (self.cal_matrix is None):
-            self.cal_matrix = None
             self.wave_min = 111.5 * u.nm
             self.wave_max = 190.0 * u.nm
 
@@ -173,7 +172,6 @@ class EUV_PDS(UV_PDS):
         # If calibration matrix file was not present (loaded by the superclass)
         # then set to default wavelength range for EUV.
         if (self.cal_matrix is None):
-            self.cal_matrix = None
             self.wave_min = 56.12 * u.nm
             self.wave_max = 118.1 * u.nm
 
