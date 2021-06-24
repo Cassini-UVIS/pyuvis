@@ -29,15 +29,13 @@ class QUBE(object):
         self.label_fname = self.path.with_suffix(".LBL")
         self.data_fname = self.path.with_suffix(".DAT")
 
-        # read the data
-        self.data1D = (np.fromfile(str(self.data_fname), ">H")).astype(np.uint16)
-
         # label stuff
         self.label = pvl.load(str(self.label_fname))
         self.cubelabel = self.label["QUBE"]
         self.LINE_BIN = self.cubelabel["LINE_BIN"]
         self.BAND_BIN = self.cubelabel["BAND_BIN"]
         self.shape = tuple(self.cubelabel["CORE_ITEMS"])
+        self.n_bands = self.shape[0] // self.BAND_BIN
         self.line_range = (
             self.cubelabel["UL_CORNER_LINE"],
             self.cubelabel["LR_CORNER_LINE"] + 1,  # for numpy slicing + 1
@@ -47,10 +45,23 @@ class QUBE(object):
             self.cubelabel["LR_CORNER_BAND"] + 1,  # for numpy slicing + 1
         )
 
+        # read the data
+        # Both the data file and the calibration files contain big-endian values.
+        if (self.cubelabel['CORE_ITEM_TYPE'] == 'MSB_UNSIGNED_INTEGER'):
+            self.data1D = (np.fromfile(str(self.data_fname), ">H")).astype(np.uint16)
+        elif (self.cubelabel['CORE_ITEM_TYPE'] == 'IEEE_REAL'):
+            self.data1D = (np.fromfile(str(self.data_fname), ">f4")).astype(np.float32)
+        else:
+            raise TypeError('Unhandled QUBE data type.  Not yet implemented.')
+
         # reshape the data with infos from label
         self.data = self.data1D.reshape(self.shape, order="F")[
             slice(*self.band_range), slice(*self.line_range), :
         ]
+
+        # Set cal_matrix to None to initialize variable.
+        self.cal_matrix = None
+        self.wavelengths = None
 
     @property
     def n_integrations(self):
@@ -58,17 +69,111 @@ class QUBE(object):
 
     @property
     def waves(self):
-        return np.linspace(self.wave_min, self.wave_max, self.shape[0])
+        """
+        Retrieve the wavelengths for this observation, in nm.
+
+        Returns
+        ----------
+        np.array of np.double values in nanometers (nm)
+            The wavelengths for each spectral bin of the QUBE observation
+        """
+
+        if (self.wavelengths is None):
+            # The Cal matrix LBL file BAND_BIN_CENTER field does not take into account
+            # spectral binning.  Therefore, we must take that into account here.
+            if (self.cal_matrix is not None):
+                wavelengths = np.array(self.cal_matrix.cubelabel['BAND_BIN_CENTER'], dtype=np.double)
+                if (self.BAND_BIN > 1):
+                    binned_wavelengths = np.zeros((self.n_bands,), dtype=wavelengths.dtype)
+                    for iwave in range(0, wavelengths.size, self.BAND_BIN):
+                        binned_wavelengths[iwave // self.BAND_BIN] = np.mean(wavelengths[iwave:iwave+self.BAND_BIN])
+                    wavelengths = binned_wavelengths / 10.0 # Convert from Angstroms to nm
+            else:
+                # If calibration matrix is not present, set to default wavelengths.
+                wavelengths = np.linspace(self.wave_min, self.wave_max, self.shape[0])
+
+            self.wavelengths = wavelengths * u.nm
+
+        return self.wavelengths
 
     @property
     def xarray(self):
         return xr.DataArray(self.data)
 
+class UV_PDS(QUBE):
+    """
+    Class: UV_PDS inherits from QUBE and is intended as a base class for
+        FUV_PDS and EUV_PDS
+    """
 
-class FUV_PDS(QUBE):
-    wave_min = 111.5 * u.nm
-    wave_max = 190.0 * u.nm
+    def __init__(self, fname):
+        """
+        Constructor for UV_PDS
 
+        Parameters
+        ----------
+        fname : str
+            Filename for the PDS QUBE to be read.
+        """
+
+        # Call superclass constructor
+        super().__init__(fname)
+
+        # Try to load the calibration Matrix file.  If not present, set to None.
+        self.cal_label_fname = self.path.joinpath(self.path.parent, self.file_id + '_CAL_3.LBL')
+        self.cal_data_fname = self.path.joinpath(self.path.parent, self.file_id + '_CAL_3.DAT')
+        if (self.cal_label_fname.exists() and self.cal_data_fname.exists()):
+            self.cal_matrix = QUBE(self.cal_data_fname)
+            waves = self.waves
+            self.wave_min = np.min(waves)
+            self.wave_max = np.max(waves)
+        else:
+            self.cal_matrix = None
+
+class FUV_PDS(UV_PDS):
+    """
+    Class: FUV_PDS defines an FUV QUBE object.
+    """
+
+    def __init__(self, fname):
+        """
+        Constructor for FUV_PDS
+
+        Parameters
+        ----------
+        fname : str
+            Filename for the PDS QUBE to be read.
+        """
+
+        # Call superclass constructor
+        super().__init__(fname)
+
+        # If calibration matrix file was not present (loaded by the superclass)
+        # then set to default wavelength range for FUV.
+        if (self.cal_matrix is None):
+            self.wave_min = 111.5 * u.nm
+            self.wave_max = 190.0 * u.nm
+
+class EUV_PDS(UV_PDS):
+
+    def __init__(self, fname):
+        """
+        Constructor for EUV_PDS
+
+        Parameters
+        ----------
+        fname : str
+            Filename for the PDS QUBE to be read.
+        """
+
+        # Call superclass constructor
+        super().__init__(fname)
+
+        # If calibration matrix file was not present (loaded by the superclass)
+        # then set to default wavelength range for EUV.
+        if (self.cal_matrix is None):
+            self.wave_min = 56.12 * u.nm
+            self.wave_max = 118.1 * u.nm
 
 class UVIS_NetCDF(object):
     def __init__(self, fname, freq):
