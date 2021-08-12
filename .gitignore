@@ -58,6 +58,6 @@ docs/_build/
 
 notebooks/plots/
 
-notebooks/\.ipynb_checkpoints/
+.ipynb_checkpoints
 
 *.pdf
