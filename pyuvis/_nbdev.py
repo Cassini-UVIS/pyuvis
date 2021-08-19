@@ -17,12 +17,22 @@ index = {"url_template": "00_downloads.ipynb",
          "EUV_PDS": "03_io.ipynb",
          "UVIS_NetCDF": "03_io.ipynb",
          "HSP": "03_io.ipynb",
-         "FUV": "03_io.ipynb"}
+         "FUV_CDF": "03_io.ipynb",
+         "FUV": "03_io.ipynb",
+         "EUV_CDF": "03_io.ipynb",
+         "archive": "04_archive.ipynb",
+         "get_archive_file": "04_archive.ipynb",
+         "steffl_spica_dates": "05_calib.ipynb",
+         "get_star_obs": "05_calib.ipynb",
+         "get_spica_obs": "05_calib.ipynb",
+         "filter_spica_for_date": "05_calib.ipynb"}
 
 modules = ["downloads.py",
            "hsp_sensitivity.py",
            "idlsav.py",
-           "io.py"]
+           "io.py",
+           "archive.py",
+           "calib.py"]
 
 doc_url = "https://michaelaye.github.io/pyuvis/"
 
