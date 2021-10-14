@@ -1,0 +1,40 @@
+package:
+  name: pyuvis
+  version: 0.6.1
+source:
+  sha256: eb19e658e6c3e3a24bffcd3bb9cf8231677abae258e45e3a88bb7cff2261af8e
+  url: https://files.pythonhosted.org/packages/5a/28/96496f09cff1ac79efcd327a9c9b3266ba6adcc92bb6094f95ba3686cdeb/pyuvis-0.6.1.tar.gz
+about:
+  dev_url: https://michaelaye.github.io
+  doc_url: https://michaelaye.github.io
+  home: https://michaelaye.github.io
+  license: Apache Software
+  license_family: APACHE
+  summary: Python tools for Cassini UVIS data
+build:
+  noarch: python
+  number: '0'
+  script: '{{ PYTHON }} -m pip install . -vv'
+extra:
+  recipe-maintainers:
+  - michaelaye
+requirements:
+  host:
+  - pip
+  - python
+  - packaging
+  - pandas>=1.0
+  - xarray>=0.19
+  - hvplot>=0.7
+  - planetarypy>=0.15
+  run:
+  - pip
+  - python
+  - packaging
+  - pandas>=1.0
+  - xarray>=0.19
+  - hvplot>=0.7
+  - planetarypy>=0.15
+test:
+  imports:
+  - pyuvis
