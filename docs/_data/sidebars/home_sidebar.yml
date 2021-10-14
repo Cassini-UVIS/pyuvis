@@ -10,9 +10,6 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: Downloads
-      url: downloads.html
-    - output: web,pdf
       title: HSP Sensitivity
       url: hsp_sensitivity.html
     - output: web,pdf
@@ -21,15 +18,6 @@ entries:
     - output: web,pdf
       title: IO
       url: io.html
-    - output: web,pdf
-      title: FUV
-      url: FUV.html
-    - output: web,pdf
-      title: UVIS Reader
-      url: UVIS reader.html
-    - output: web,pdf
-      title: Indexes
-      url: uvis_archive_reader.html
     output: web
     title: pyuvis
   output: web

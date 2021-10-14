@@ -2,37 +2,26 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"url_template": "00_downloads.ipynb",
-         "url_root": "00_downloads.ipynb",
-         "url_name": "00_downloads.ipynb",
-         "data": "01_hsp_sensitivity.ipynb",
+index = {"data": "01_hsp_sensitivity.ipynb",
          "s": "01_hsp_sensitivity.ipynb",
          "sens_df": "01_hsp_sensitivity.ipynb",
          "check_kernels": "02_idlsav.ipynb",
          "swap_cell": "02_idlsav.ipynb",
          "read_idlsav_file": "02_idlsav.ipynb",
-         "QUBE": "03_io.ipynb",
-         "UV_PDS": "03_io.ipynb",
-         "FUV_PDS": "03_io.ipynb",
-         "EUV_PDS": "03_io.ipynb",
+         "SavConverter": "02_idlsav.ipynb",
+         "hv.config.image_rtol": "03_io.ipynb",
+         "PDSReader": "03_io.ipynb",
+         "UVPDS": "03_io.ipynb",
+         "UVISObs": "03_io.ipynb",
          "UVIS_NetCDF": "03_io.ipynb",
          "HSP": "03_io.ipynb",
          "FUV_CDF": "03_io.ipynb",
          "FUV": "03_io.ipynb",
-         "EUV_CDF": "03_io.ipynb",
-         "archive": "04_archive.ipynb",
-         "get_archive_file": "04_archive.ipynb",
-         "steffl_spica_dates": "05_calib.ipynb",
-         "get_star_obs": "05_calib.ipynb",
-         "get_spica_obs": "05_calib.ipynb",
-         "filter_spica_for_date": "05_calib.ipynb"}
+         "EUV_CDF": "03_io.ipynb"}
 
-modules = ["downloads.py",
-           "hsp_sensitivity.py",
+modules = ["hsp_sensitivity.py",
            "idlsav.py",
-           "io.py",
-           "archive.py",
-           "calib.py"]
+           "io.py"]
 
 doc_url = "https://michaelaye.github.io/pyuvis/"
 

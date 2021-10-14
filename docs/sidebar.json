@@ -1,12 +1,8 @@
 {
   "pyuvis": {
     "Overview": "/",
-    "Downloads": "downloads.html",
     "HSP Sensitivity": "hsp_sensitivity.html",
     "IDLSAV": "idlsav.html",
-    "IO": "io.html",
-    "FUV": "FUV.html",
-    "UVIS Reader": "UVIS reader.html",
-    "Indexes": "uvis_archive_reader.html"
+    "IO": "io.html"
   }
 }
