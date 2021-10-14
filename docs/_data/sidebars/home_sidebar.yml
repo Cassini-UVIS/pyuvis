@@ -11,13 +11,13 @@ entries:
       url: /
     - output: web,pdf
       title: HSP Sensitivity
-      url: hsp_sensitivity.html
+      url: /hsp_sensitivity
     - output: web,pdf
       title: IDLSAV
-      url: idlsav.html
+      url: /idlsav
     - output: web,pdf
       title: IO
-      url: io.html
+      url: /io
     output: web
     title: pyuvis
   output: web

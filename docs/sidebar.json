@@ -1,8 +1,8 @@
 {
   "pyuvis": {
     "Overview": "/",
-    "HSP Sensitivity": "hsp_sensitivity.html",
-    "IDLSAV": "idlsav.html",
-    "IO": "io.html"
+    "HSP Sensitivity": "/hsp_sensitivity",
+    "IDLSAV": "/idlsav",
+    "IO": "/io"
   }
 }
