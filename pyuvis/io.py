@@ -193,8 +193,10 @@ class UVPDS:
     @property
     def calibrated(self):
         "Following the instructions in self.caliblabel.QUBE.DESCRIPTION"
+        caldata = self.cal_data.data
+        caldata[caldata == -1] = np.nan
         calibrated = (
-            self.data * self.cal_data.data * self.caliblabel.QUBE.CORE_MULTIPLIER
+            self.data * caldata * self.caliblabel.QUBE.CORE_MULTIPLIER
         )
         arr = self.create_xarray(calibrated)
         arr.attrs["units"] = "kiloRayleighs"
