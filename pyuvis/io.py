@@ -4,7 +4,6 @@ __all__ = ['PDSReader', 'UVPDS', 'UVISObs', 'UVIS_NetCDF', 'HSP', 'FUV_CDF', 'FU
 
 # Cell
 import datetime as dt
-import warnings
 from pathlib import Path
 from typing import Union
 

@@ -17,11 +17,20 @@ index = {"data": "01_hsp_sensitivity.ipynb",
          "HSP": "03_io.ipynb",
          "FUV_CDF": "03_io.ipynb",
          "FUV": "03_io.ipynb",
-         "EUV_CDF": "03_io.ipynb"}
+         "EUV_CDF": "03_io.ipynb",
+         "get_star_obs": "04_calib.greg.ipynb",
+         "get_spica_obs": "04_calib.greg.ipynb",
+         "filter_spica_for_date": "04_calib.greg.ipynb",
+         "CatalogFilter": "05_pds.ipynb",
+         "steffl_spica_dates": "06_calib.steffl.ipynb",
+         "steffl_spica_nasa_dates": "06_calib.steffl.ipynb"}
 
 modules = ["hsp_sensitivity.py",
            "idlsav.py",
-           "io.py"]
+           "io.py",
+           "calib/greg.py",
+           "pds.py",
+           "calib/steffl.py"]
 
 doc_url = "https://michaelaye.github.io/pyuvis/"
 
