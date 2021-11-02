@@ -99,10 +99,13 @@ class UVPDS:
         # The attribute `pid` will carry the shortenend PDS identifier,
         # attribute `uvis_id` will just store what the user came in with.
         uvis_id: str,
+        skip_download: bool=False
     ):
         self.uvis_id = uvis_id
         self.product_id = self.pid = uvis_id[:17]
-        self.path = get_data_path(self.pid)
+        self.path = get_data_path(self.pid, skip_download)
+        if self.path is None:
+            raise FileNotFoundError("No valid data path found.")
         self.pds = PDSReader(self.path)
         self.datalabel = self.pds.label
         self.cal_data = None
@@ -218,7 +221,7 @@ class UVPDS:
         elif self.pid.startswith("FUV"):
             return 118.1 * u.nm
         else:
-            return NotImplementedError(self.PRODUCT_ID)
+            raise NotImplementedError(self.PRODUCT_ID)
 
     def set_cal_wavelengths(self):
         """

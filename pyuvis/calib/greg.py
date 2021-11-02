@@ -8,6 +8,7 @@ from fastcore.utils import Path
 import pandas as pd
 from planetarypy.utils import nasa_datetime_to_iso
 from ..pds import CatalogFilter
+from ..io import UVISObs
 
 # Cell
 def get_star_obs():
@@ -27,6 +28,7 @@ def get_star_obs():
     )
     star_obs.filename_time = pd.to_datetime(star_obs.filename_time)
     star_obs["date"] = pd.DatetimeIndex(star_obs.filename_time.dt.date)
+    star_obs["product_id"] = star_obs['filename'].str[:17]
     return star_obs
 
 # Cell

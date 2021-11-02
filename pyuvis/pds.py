@@ -3,18 +3,22 @@
 __all__ = ['CatalogFilter']
 
 # Cell
-from yarl import URL
+from datetime import date as dtdate
+from datetime import timedelta
 from pathlib import Path
+
+from yarl import URL
+
 import hvplot.pandas  # noqa
 from nbverbose.showdoc import show_doc
 from planetarypy.pds.apps import find_indexes, get_index
-from planetarypy.utils import iso_to_nasa_date, nasa_datetime_to_iso
+from planetarypy import utils
 
 # Cell
 class CatalogFilter:
     "useful to make class to keep the base catalog in memory"
 
-    def __init__(self, date: str=None):
+    def __init__(self, date: str = None):
         self.date = date
         df = get_index("cassini.uvis", "index")
         df["product_id"] = df.FILE_NAME.map(lambda x: Path(x).stem)
@@ -26,12 +30,42 @@ class CatalogFilter:
         self.df = df
 
     @property
-    def date(self) -> str:
+    def date(self):
         return self._date
 
     @date.setter
     def date(self, value: str):
-        self._date = value
+        date = value.replace("_", "-")
+        tokens = date.split("-")
+        if len(tokens) == 2:
+            date = utils.nasa_date_to_datetime(date)
+        elif len(tokens) == 3:
+            tokens = [int(i) for i in tokens]
+            date = dtdate(*tokens)
+        self._date = date
+
+    def set_next_day(self):
+        next_day = self.date + timedelta(days=1)
+        self.date = next_day.isoformat()[:10]
+
+    @property
+    def isodate(self):
+        return self.date.isoformat()[:10]
+
+    @property
+    def nasadate(self):
+        return utils.iso_to_nasa_date(self.isodate)
+
+    @property
+    def piddate(self):
+        return self.nasadate.replace("-","_")
+    @property
+    def fuvdate(self):
+        return "FUV"+self.piddate
+
+    @property
+    def euvdate(self):
+        return "EUV"+self.piddate
 
     @property
     def uv(self):
@@ -46,13 +80,11 @@ class CatalogFilter:
 
     def get_fuv_date(self, date: str = None):  # datestring like yyyy-jjj, e.g. 2010-198
         date = self.date if date is None else date
-        _filter = "FUV" + self._get_clean_date_filter(date)
-        return self.df[self.df.index.str.startswith(_filter)]
+        return self.df[self.df.index.str.startswith(self.fuvdate)]
 
     def get_euv_date(self, date: str = None):  # datestring like yyyy-jjj
         date = self.date if date is None else date
-        _filter = "EUV" + self._get_clean_date_filter(date)
-        return self.df[self.df.index.str.startswith(_filter)]
+        return self.df[self.df.index.str.startswith(self.euvdate)]
 
     @property
     def ustare_stars(self):
@@ -68,6 +100,6 @@ class CatalogFilter:
         uvtype: str = "",  # add EUV/FUV filter
     ):
         date = self.date if date is None else date
-        _filter = uvtype + self._get_clean_date_filter(date)
+        _filter = uvtype + self.nasadate
         df = self.ustare_stars
         return df[df.index.str.contains(_filter)]

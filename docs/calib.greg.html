@@ -34,10 +34,10 @@ nb_path: "notebooks/04_calib.greg.ipynb"
 
 
 
-<div id="959966c1-380e-4b0a-8139-12dfeef29d2d"></div>
+<div id="a1fabdf5-7f0a-45d6-82af-adeb1dd64f34"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#959966c1-380e-4b0a-8139-12dfeef29d2d');
+var element = $('#a1fabdf5-7f0a-45d6-82af-adeb1dd64f34');
 
 (function(root) {
   function now() {
@@ -1675,10 +1675,10 @@ var element = $('#959966c1-380e-4b0a-8139-12dfeef29d2d');
 
 
 
-<div id="afe01f7c-b71d-4513-9e01-e1bf4373036c"></div>
+<div id="99790ff9-a31e-4b06-915b-a9b7b95e8e9d"></div>
 <div class="output_subarea output_javascript ">
 <script type="text/javascript">
-var element = $('#afe01f7c-b71d-4513-9e01-e1bf4373036c');
+var element = $('#99790ff9-a31e-4b06-915b-a9b7b95e8e9d');
 
 if ((window.PyViz === undefined) || (window.PyViz instanceof HTMLElement)) {
   window.PyViz = {comms: {}, comm_status:{}, kernels:{}, receivers: {}, plot_index: []}
@@ -1957,7 +1957,7 @@ if (window.Jupyter !== undefined) {
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_star_obs" class="doc_header"><code>get_star_obs</code><a href="https://github.com/michaelaye/pyuvis/tree/master/pyuvis/calib/greg.py#L13" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_star_obs</code>()</p>
+<h4 id="get_star_obs" class="doc_header"><code>get_star_obs</code><a href="https://github.com/michaelaye/pyuvis/tree/master/pyuvis/calib/greg.py#L14" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_star_obs</code>()</p>
 </blockquote>
 <p>Read Greg's file into dataframe and add some meta-columns.</p>
 
@@ -1985,7 +1985,8 @@ if (window.Jupyter !== undefined) {
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">get_star_obs</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">get_star_obs</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -2032,6 +2033,7 @@ if (window.Jupyter !== undefined) {
       <th>detector</th>
       <th>filename_time</th>
       <th>date</th>
+      <th>product_id</th>
     </tr>
   </thead>
   <tbody>
@@ -2052,6 +2054,7 @@ if (window.Jupyter !== undefined) {
       <td>EUV</td>
       <td>1999-01-16 19:47:15</td>
       <td>1999-01-16</td>
+      <td>EUV1999_016_19_47</td>
     </tr>
     <tr>
       <th>1</th>
@@ -2070,6 +2073,7 @@ if (window.Jupyter !== undefined) {
       <td>EUV</td>
       <td>1999-01-16 19:49:06</td>
       <td>1999-01-16</td>
+      <td>EUV1999_016_19_49</td>
     </tr>
     <tr>
       <th>2</th>
@@ -2088,6 +2092,7 @@ if (window.Jupyter !== undefined) {
       <td>EUV</td>
       <td>1999-01-16 20:08:10</td>
       <td>1999-01-16</td>
+      <td>EUV1999_016_20_08</td>
     </tr>
     <tr>
       <th>3</th>
@@ -2106,6 +2111,7 @@ if (window.Jupyter !== undefined) {
       <td>EUV</td>
       <td>1999-01-16 20:16:14</td>
       <td>1999-01-16</td>
+      <td>EUV1999_016_20_16</td>
     </tr>
     <tr>
       <th>4</th>
@@ -2124,12 +2130,368 @@ if (window.Jupyter !== undefined) {
       <td>EUV</td>
       <td>1999-01-16 20:18:06</td>
       <td>1999-01-16</td>
+      <td>EUV1999_016_20_18</td>
     </tr>
   </tbody>
 </table>
 </div>
 </div>
 
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;product_id&quot;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>filename</th>
+      <th>slit</th>
+      <th>nx</th>
+      <th>ny</th>
+      <th>nz</th>
+      <th>int</th>
+      <th>odcid</th>
+      <th>x1</th>
+      <th>x2</th>
+      <th>y1</th>
+      <th>y2</th>
+      <th>name</th>
+      <th>detector</th>
+      <th>filename_time</th>
+      <th>date</th>
+      <th>product_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>107</th>
+      <td>EUV2001_299_20_44_21_0</td>
+      <td>1</td>
+      <td>1024</td>
+      <td>32</td>
+      <td>233</td>
+      <td>30</td>
+      <td>98</td>
+      <td>0</td>
+      <td>1023</td>
+      <td>32</td>
+      <td>63</td>
+      <td>alp vir</td>
+      <td>EUV</td>
+      <td>2001-10-26 20:44:21</td>
+      <td>2001-10-26</td>
+      <td>EUV2001_299_20_44</td>
+    </tr>
+    <tr>
+      <th>108</th>
+      <td>EUV2001_299_20_44_21_1</td>
+      <td>1</td>
+      <td>8</td>
+      <td>1</td>
+      <td>233</td>
+      <td>30</td>
+      <td>98</td>
+      <td>0</td>
+      <td>1023</td>
+      <td>0</td>
+      <td>31</td>
+      <td>alp vir</td>
+      <td>EUV</td>
+      <td>2001-10-26 20:44:21</td>
+      <td>2001-10-26</td>
+      <td>EUV2001_299_20_44</td>
+    </tr>
+    <tr>
+      <th>109</th>
+      <td>EUV2001_299_22_41_51_1</td>
+      <td>1</td>
+      <td>8</td>
+      <td>1</td>
+      <td>234</td>
+      <td>30</td>
+      <td>97</td>
+      <td>0</td>
+      <td>1023</td>
+      <td>0</td>
+      <td>15</td>
+      <td>alp vir</td>
+      <td>EUV</td>
+      <td>2001-10-26 22:41:51</td>
+      <td>2001-10-26</td>
+      <td>EUV2001_299_22_41</td>
+    </tr>
+    <tr>
+      <th>110</th>
+      <td>EUV2001_299_22_41_51_0</td>
+      <td>1</td>
+      <td>1024</td>
+      <td>32</td>
+      <td>234</td>
+      <td>30</td>
+      <td>97</td>
+      <td>0</td>
+      <td>1023</td>
+      <td>16</td>
+      <td>47</td>
+      <td>alp vir</td>
+      <td>EUV</td>
+      <td>2001-10-26 22:41:51</td>
+      <td>2001-10-26</td>
+      <td>EUV2001_299_22_41</td>
+    </tr>
+    <tr>
+      <th>111</th>
+      <td>EUV2001_299_22_41_51_2</td>
+      <td>1</td>
+      <td>8</td>
+      <td>1</td>
+      <td>234</td>
+      <td>30</td>
+      <td>97</td>
+      <td>0</td>
+      <td>1023</td>
+      <td>48</td>
+      <td>63</td>
+      <td>alp vir</td>
+      <td>EUV</td>
+      <td>2001-10-26 22:41:51</td>
+      <td>2001-10-26</td>
+      <td>EUV2001_299_22_41</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>874</th>
+      <td>FUV2002_292_01_57_06_UVIS_C34ST_BRIGHT19001_PR...</td>
+      <td>1</td>
+      <td>1024</td>
+      <td>10</td>
+      <td>1</td>
+      <td>16</td>
+      <td>125</td>
+      <td>0</td>
+      <td>1023</td>
+      <td>27</td>
+      <td>36</td>
+      <td>eta uma</td>
+      <td>FUV</td>
+      <td>2002-10-19 01:57:06</td>
+      <td>2002-10-19</td>
+      <td>FUV2002_292_01_57</td>
+    </tr>
+    <tr>
+      <th>875</th>
+      <td>FUV2002_292_01_57_06_UVIS_C34ST_BRIGHT19001_PR...</td>
+      <td>1</td>
+      <td>1024</td>
+      <td>1</td>
+      <td>1</td>
+      <td>16</td>
+      <td>125</td>
+      <td>0</td>
+      <td>1023</td>
+      <td>0</td>
+      <td>26</td>
+      <td>eta uma</td>
+      <td>FUV</td>
+      <td>2002-10-19 01:57:06</td>
+      <td>2002-10-19</td>
+      <td>FUV2002_292_01_57</td>
+    </tr>
+    <tr>
+      <th>876</th>
+      <td>FUV2002_292_01_57_06_UVIS_C34ST_BRIGHT19001_PR...</td>
+      <td>1</td>
+      <td>1024</td>
+      <td>1</td>
+      <td>1</td>
+      <td>16</td>
+      <td>125</td>
+      <td>0</td>
+      <td>1023</td>
+      <td>37</td>
+      <td>63</td>
+      <td>eta uma</td>
+      <td>FUV</td>
+      <td>2002-10-19 01:57:06</td>
+      <td>2002-10-19</td>
+      <td>FUV2002_292_01_57</td>
+    </tr>
+    <tr>
+      <th>919</th>
+      <td>FUV2003_021_20_48_13_UVIS_C35ST_BRIGHT19001_PR...</td>
+      <td>1</td>
+      <td>1</td>
+      <td>64</td>
+      <td>23</td>
+      <td>1</td>
+      <td>38</td>
+      <td>0</td>
+      <td>1023</td>
+      <td>0</td>
+      <td>63</td>
+      <td>kap ori</td>
+      <td>FUV</td>
+      <td>2003-01-21 20:48:13</td>
+      <td>2003-01-21</td>
+      <td>FUV2003_021_20_48</td>
+    </tr>
+    <tr>
+      <th>920</th>
+      <td>FUV2003_021_20_48_53_UVIS_C35ST_BRIGHT19001_PR...</td>
+      <td>1</td>
+      <td>1024</td>
+      <td>1</td>
+      <td>302</td>
+      <td>1</td>
+      <td>39</td>
+      <td>0</td>
+      <td>1023</td>
+      <td>0</td>
+      <td>63</td>
+      <td>kap ori</td>
+      <td>FUV</td>
+      <td>2003-01-21 20:48:53</td>
+      <td>2003-01-21</td>
+      <td>FUV2003_021_20_48</td>
+    </tr>
+  </tbody>
+</table>
+<p>88 rows × 16 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">uvis</span> <span class="o">=</span> <span class="n">UVISObs</span><span class="p">(</span><span class="s2">&quot;EUV2001_299_20_44&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">uvis</span><span class="o">.</span><span class="n">fuv</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_2232322/507024058.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>uvis<span class="ansi-blue-fg">.</span>fuv
+
+<span class="ansi-green-fg">~/Dropbox/src/pyuvis/pyuvis/io.py</span> in <span class="ansi-cyan-fg">fuv</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    314</span>     <span class="ansi-blue-fg">@</span>property
+<span class="ansi-green-intense-fg ansi-bold">    315</span>     <span class="ansi-green-fg">def</span> fuv<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 316</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> UVPDS<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>FUV_PID<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    317</span> 
+<span class="ansi-green-intense-fg ansi-bold">    318</span> <span class="ansi-red-fg"># Cell</span>
+
+<span class="ansi-green-fg">~/Dropbox/src/pyuvis/pyuvis/io.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, uvis_id)</span>
+<span class="ansi-green-intense-fg ansi-bold">    104</span>         self<span class="ansi-blue-fg">.</span>product_id <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>pid <span class="ansi-blue-fg">=</span> uvis_id<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">17</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    105</span>         self<span class="ansi-blue-fg">.</span>path <span class="ansi-blue-fg">=</span> get_data_path<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>pid<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 106</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>pds <span class="ansi-blue-fg">=</span> PDSReader<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    107</span>         self<span class="ansi-blue-fg">.</span>datalabel <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>pds<span class="ansi-blue-fg">.</span>label
+<span class="ansi-green-intense-fg ansi-bold">    108</span>         self<span class="ansi-blue-fg">.</span>cal_data <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">None</span>
+
+<span class="ansi-green-fg">~/Dropbox/src/pyuvis/pyuvis/io.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, datapath)</span>
+<span class="ansi-green-intense-fg ansi-bold">     52</span>             label<span class="ansi-blue-fg">.</span>QUBE<span class="ansi-blue-fg">.</span>LR_CORNER_BAND <span class="ansi-blue-fg">+</span> <span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">,</span>  <span class="ansi-red-fg"># for numpy slicing + 1</span>
+<span class="ansi-green-intense-fg ansi-bold">     53</span>         ]
+<span class="ansi-green-fg">---&gt; 54</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>band_range<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> <span class="ansi-cyan-fg">1024</span> <span class="ansi-blue-fg">//</span> label<span class="ansi-blue-fg">.</span>QUBE<span class="ansi-blue-fg">.</span>BAND_BIN
+<span class="ansi-green-intense-fg ansi-bold">     55</span> 
+<span class="ansi-green-intense-fg ansi-bold">     56</span>         self.line_range = [
+
+<span class="ansi-red-fg">TypeError</span>: unsupported operand type(s) for //: &#39;int&#39; and &#39;L&#39;</pre>
+</div>
 </div>
 
 </div>
@@ -2197,7 +2559,7 @@ dtype: object</pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="get_spica_obs" class="doc_header"><code>get_spica_obs</code><a href="https://github.com/michaelaye/pyuvis/tree/master/pyuvis/calib/greg.py#L33" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_spica_obs</code>()</p>
+<h4 id="get_spica_obs" class="doc_header"><code>get_spica_obs</code><a href="https://github.com/michaelaye/pyuvis/tree/master/pyuvis/calib/greg.py#L35" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>get_spica_obs</code>()</p>
 </blockquote>
 <p>Filter Greg's list for Spica (alp vir) obs.</p>
 
@@ -2389,12 +2751,8 @@ dtype: object</pre>
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="filter_spica_for_date" class="doc_header"><code>filter_spica_for_date</code><a href="https://github.com/michaelaye/pyuvis/tree/master/pyuvis/calib/greg.py#L38" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>filter_spica_for_date</code>(<strong><code>date</code></strong>:<code>str</code>)</p>
+<h4 id="filter_spica_for_date" class="doc_header"><code>filter_spica_for_date</code><a href="https://github.com/michaelaye/pyuvis/tree/master/pyuvis/calib/greg.py#L40" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>filter_spica_for_date</code>(<strong><code>date</code></strong>:<code>str</code>)</p>
 </blockquote>
-<p><strong>Parameters:</strong></p>
-<ul>
-<li><strong><code>date</code></strong> : <em><code>&lt;class 'str'&gt;</code></em>   <p>date in shape of yyyy-mm-dd</p></li>
-</ul>
 
 </div>
 
@@ -2592,22 +2950,88 @@ dtype: object</pre>
 
 <div class="output_area">
 
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/tmp/ipykernel_2220740/2746532.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>cat <span class="ansi-blue-fg">=</span> CatalogFilter<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;2002-198&#34;</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">~/Dropbox/src/pyuvis/pyuvis/pds.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, date)</span>
-<span class="ansi-green-intense-fg ansi-bold">      9</span>     <span class="ansi-green-fg">def</span> __init__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> date<span class="ansi-blue-fg">:</span> str<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     10</span>         self<span class="ansi-blue-fg">.</span>date <span class="ansi-blue-fg">=</span> date
-<span class="ansi-green-fg">---&gt; 11</span><span class="ansi-red-fg">         </span>df <span class="ansi-blue-fg">=</span> get_index<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;cassini.uvis&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;index&#34;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     12</span>         df<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;product_id&#34;</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> df<span class="ansi-blue-fg">.</span>FILE_NAME<span class="ansi-blue-fg">.</span>map<span class="ansi-blue-fg">(</span><span class="ansi-green-fg">lambda</span> x<span class="ansi-blue-fg">:</span> Path<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>stem<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     13</span>         df<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#34;volume&#34;</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">=</span> df<span class="ansi-blue-fg">.</span>FILE_NAME<span class="ansi-blue-fg">.</span>map<span class="ansi-blue-fg">(</span><span class="ansi-green-fg">lambda</span> x<span class="ansi-blue-fg">:</span> x<span class="ansi-blue-fg">.</span>split<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;/&#34;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">NameError</span>: name &#39;get_index&#39; is not defined</pre>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Stored index is up-to-date.
+</pre>
 </div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cat</span><span class="o">.</span><span class="n">nasadate</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#39;2002-198&#39;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cat</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">START_TIME</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>product_id
+HSP1999_007_16_53    1999-01-07 16:53:07.953
+HDAC1999_007_16_31   1999-01-07 16:31:07.962
+HDAC1999_007_16_33   1999-01-07 16:33:07.961
+HDAC1999_007_16_36   1999-01-07 16:36:13.960
+HDAC1999_007_16_42   1999-01-07 16:42:07.958
+                               ...          
+FUV2017_258_07_15    2017-09-15 07:15:04.442
+EUV2017_257_22_39    2017-09-14 22:39:54.016
+EUV2017_258_04_31    2017-09-15 04:31:53.005
+EUV2017_258_07_00    2017-09-15 07:00:27.697
+EUV2017_258_07_15    2017-09-15 07:15:04.442
+Name: START_TIME, Length: 203340, dtype: datetime64[ns]</pre>
+</div>
+
 </div>
 
 </div>
