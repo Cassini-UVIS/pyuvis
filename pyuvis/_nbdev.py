@@ -24,7 +24,8 @@ index = {"data": "01_hsp_sensitivity.ipynb",
          "CatalogFilter": "05_pds.ipynb",
          "steffl_spica_dates": "06_calib.steffl.ipynb",
          "steffl_spica_nasa_dates": "06_calib.steffl.ipynb",
-         "StefflCalib": "06_calib.steffl.ipynb"}
+         "StefflCalib": "06_calib.steffl.ipynb",
+         "efuv_pid_regex": "03_io.ipynb"}
 
 modules = ["hsp_sensitivity.py",
            "idlsav.py",
