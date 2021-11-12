@@ -10,6 +10,7 @@ index = {"data": "01_hsp_sensitivity.ipynb",
          "read_idlsav_file": "02_idlsav.ipynb",
          "SavConverter": "02_idlsav.ipynb",
          "hv.config.image_rtol": "03_io.ipynb",
+         "efuv_pid_regex": "03_io.ipynb",
          "PDSReader": "03_io.ipynb",
          "UVPDS": "03_io.ipynb",
          "UVISObs": "03_io.ipynb",
@@ -24,8 +25,7 @@ index = {"data": "01_hsp_sensitivity.ipynb",
          "CatalogFilter": "05_pds.ipynb",
          "steffl_spica_dates": "06_calib.steffl.ipynb",
          "steffl_spica_nasa_dates": "06_calib.steffl.ipynb",
-         "StefflCalib": "06_calib.steffl.ipynb",
-         "efuv_pid_regex": "03_io.ipynb"}
+         "Col2Col": "06_calib.steffl.ipynb"}
 
 modules = ["hsp_sensitivity.py",
            "idlsav.py",
