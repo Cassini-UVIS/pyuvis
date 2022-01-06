@@ -25,6 +25,8 @@ index = {"data": "01_hsp_sensitivity.ipynb",
          "CatalogFilter": "05_pds.ipynb",
          "steffl_spica_dates": "06_calib.steffl.ipynb",
          "steffl_spica_nasa_dates": "06_calib.steffl.ipynb",
+         "Row2Row": "06_calib.steffl.ipynb",
+         "create_detector_stack": "06_calib.steffl.ipynb",
          "Col2Col": "06_calib.steffl.ipynb"}
 
 modules = ["hsp_sensitivity.py",

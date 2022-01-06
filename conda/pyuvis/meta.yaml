@@ -1,9 +1,9 @@
 package:
   name: pyuvis
-  version: 0.6.3
+  version: 0.6.4
 source:
-  sha256: 5dc2f47848343253c953a4af2db2f7a58af60e01e08dbc89d74800962154c673
-  url: https://files.pythonhosted.org/packages/a0/fe/fbe8368c3f9fa89673c2af6524efd2067e9ab41a0b23f279f02ec70f10ef/pyuvis-0.6.3.tar.gz
+  sha256: 187f4b1a7c9bdbd115678b803c9fed2c3984fc0aec1c15ccd679f537f19e1e13
+  url: https://files.pythonhosted.org/packages/f8/a4/47e1874de802fdecb5d5db4772d25dd683b30485870086a634ee8925f660/pyuvis-0.6.4.tar.gz
 about:
   dev_url: https://michaelaye.github.io
   doc_url: https://michaelaye.github.io
