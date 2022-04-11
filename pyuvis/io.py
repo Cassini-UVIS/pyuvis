@@ -13,6 +13,7 @@ import seaborn as sns
 from astropy import units as u
 from fastcore.utils import dict2obj
 
+
 import holoviews as hv
 import hvplot.xarray
 import pandas as pd
@@ -54,7 +55,10 @@ class PDSReader:
             label.QUBE.UL_CORNER_BAND,
             label.QUBE.LR_CORNER_BAND + 1,  # for numpy slicing + 1
         ]
-        self.band_range[1] = 1024 // label.QUBE.BAND_BIN
+        try:
+            self.band_range[1] = 1024 // label.QUBE.BAND_BIN
+        except TypeError:
+            raise ValueError("Unsupported data object. See https://github.com/Cassini-UVIS/pyuvis/issues/10")
 
         self.line_range = [
             label.QUBE.UL_CORNER_LINE,
@@ -136,11 +140,13 @@ class UVPDS:
 
     @property
     def cal_label_path(self):
-        return self.path.parent / (self.file_id + "_CAL_3.LBL")
+        p = self.path.parent
+        return max(list(p.glob(f"{self.file_id}_CAL_?.LBL")))
 
     @property
     def cal_data_path(self):
-        return self.path.parent / (self.file_id + "_CAL_3.DAT")
+        p = self.path.parent
+        return max(list(p.glob(f"{self.file_id}_CAL_?.DAT")))
 
     @property
     def n_bands(self):
@@ -300,6 +306,15 @@ class UVPDS:
             .opts(gridstyle={"grid_line_color": "white"})
             .opts(axiswise=True)
         )
+
+    def __str__(self):
+        s = f"UVIS ID: {self.uvis_id}\n"
+        s += f"PDS Product ID: {self.product_id}\n"
+        s += f"Path: {self.path}\n"
+        return s
+
+    def __repr__(self):
+        return self.__str__()
 
 # Cell
 class UVISObs:
