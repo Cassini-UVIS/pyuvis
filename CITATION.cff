@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use pyuvis in your research, please cite it using the metadata below."
+title: "pyuvis: Python tools for Cassini UVIS data"
+authors:
+  - family-names: "Aye"
+    given-names: "K.-Michael"
+    affiliation: "Freie Universität Berlin"
+abstract: >-
+  Python package providing readers, calibration utilities, and PDS-archive
+  helpers for Cassini UVIS (Ultraviolet Imaging Spectrograph) data. Built on
+  top of planetarypy for data retrieval and PDS index handling.
+version: "0.9.0"
+date-released: "2026-04-27"
+license: Apache-2.0
+url: "https://cassini-uvis.github.io/pyuvis/"
+repository-code: "https://github.com/Cassini-UVIS/pyuvis"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.593931"
+    description: "Concept DOI (resolves to the latest released version on Zenodo)"
+keywords:
+  - "Cassini"
+  - "UVIS"
+  - "PDS"
+  - "planetary science"
+  - "spectroscopy"
+  - "ultraviolet"
