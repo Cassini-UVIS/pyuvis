@@ -1,4 +1,4 @@
-__all__ = ['steffl_spica_dates', 'steffl_spica_nasa_dates', 'Row2Row', 'create_detector_stack', 'Col2Col']
+__all__ = ['steffl_spica_dates', 'steffl_spica_doy_dates', 'Row2Row', 'create_detector_stack', 'Col2Col']
 
 import datetime as dt
 from functools import cached_property
@@ -17,7 +17,7 @@ from ..io import UVPDS, UVISObs
 from ..pds import CatalogFilter
 
 steffl_spica_dates = ["2001-04-03", "2002-07-17", "2003-05-19"]
-steffl_spica_nasa_dates = [
+steffl_spica_doy_dates = [
     dt.date.fromisoformat(d).strftime("%Y-%j") for d in steffl_spica_dates
 ]
 
