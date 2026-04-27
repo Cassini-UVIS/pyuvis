@@ -17,7 +17,7 @@ website:
     search: true
     left:
       - text: Home
-        href: index.ipynb
+        href: index.qmd
       - text: Tutorials
         href: tutorials/index.qmd
       - text: API Reference

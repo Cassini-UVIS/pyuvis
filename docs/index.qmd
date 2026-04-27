@@ -1,0 +1,81 @@
+---
+title: "pyuvis"
+subtitle: "Python tools for working with Cassini UVIS data"
+---
+
+[![DOI](https://zenodo.org/badge/22502011.svg)](https://doi.org/10.5281/zenodo.593931)
+
+`pyuvis` provides readers, calibration utilities, and PDS-archive helpers
+for the Cassini UVIS (Ultraviolet Imaging Spectrograph) instrument. Data
+discovery and download are delegated to
+[planetarypy](https://github.com/planetarypy/planetarypy); pyuvis focuses on
+opening the resulting files and turning them into useful arrays
+(`numpy` / `xarray` / `pandas`) you can analyse.
+
+## Install
+
+```bash
+pip install pyuvis
+```
+
+The package will pull in `planetarypy` (≥ 0.21) as a dependency. On first
+use, `planetarypy` will ask you for a local data directory where it will
+cache PDS products it downloads on your behalf.
+
+For development:
+
+```bash
+git clone https://github.com/Cassini-UVIS/pyuvis
+cd pyuvis
+pip install -e ".[dev,docs]"
+```
+
+Supported Python versions: **3.12, 3.13, 3.14**.
+
+## A first look
+
+```python
+from pyuvis import UVPDS
+
+uv = UVPDS("FUV2005_172_03_35")  # downloads via planetarypy if not cached
+
+uv.data            # numpy array of raw counts
+uv.xarray          # xarray.DataArray with (spectral, spatial, samples) coords
+uv.plot()          # quick hvplot
+
+uv.calibrated      # calibrated data, if a calibration matrix is present
+```
+
+For browsing the PDS catalog of UVIS products by date / observation type / target:
+
+```python
+from pyuvis.pds import CatalogFilter
+
+cat = CatalogFilter("2002-198")    # accepts "yyyy-jjj" or "yyyy-mm-dd"
+cat.doydate                         # "2002-198"
+cat.ustare_stars                    # USTARE-type observations on STAR targets
+cat.get_ustare_stars_date("FUV")    # filter to FUV stars on the given date
+```
+
+## Where to next
+
+- **[Tutorials](tutorials/index.qmd)** — worked examples (HSP sensitivity, IDL
+  `.sav` round-trips, Greg & Steffl calibrations, PDS catalog filtering, FUV/EUV stats).
+- **[API Reference](reference/index.qmd)** — every public class and function,
+  generated from the source by `quartodoc`.
+
+## Citation
+
+If you use `pyuvis` in your research, please cite via the metadata in
+[`CITATION.cff`](https://github.com/Cassini-UVIS/pyuvis/blob/master/CITATION.cff)
+or the Zenodo DOI badge above.
+
+## Issues and contributing
+
+Report issues at <https://github.com/Cassini-UVIS/pyuvis/issues>. Pull
+requests welcome — please run `pytest` and render the docs locally
+(`make docs`) before opening one.
+
+## License
+
+[Apache 2.0](https://github.com/Cassini-UVIS/pyuvis/blob/master/LICENSE).
