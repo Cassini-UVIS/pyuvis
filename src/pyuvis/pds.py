@@ -46,12 +46,12 @@ class CatalogFilter:
         return self.date.isoformat()[:10]
 
     @property
-    def nasadate(self):
+    def doydate(self):
         return self.date.strftime("%Y-%j")
 
     @property
     def piddate(self):
-        return self.nasadate.replace("-","_")
+        return self.doydate.replace("-","_")
     @property
     def fuvdate(self):
         return "FUV"+self.piddate
@@ -93,6 +93,6 @@ class CatalogFilter:
         uvtype: str = "",  # add EUV/FUV filter
     ):
         date = self.date if date is None else date
-        _filter = uvtype + self.nasadate
+        _filter = uvtype + self.doydate
         df = self.ustare_stars
         return df[df.index.str.contains(_filter)]
