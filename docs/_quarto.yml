@@ -1,0 +1,79 @@
+project:
+  type: website
+  output-dir: _build
+  preview:
+    port: 4200
+    browser: true
+
+execute:
+  freeze: auto
+
+website:
+  title: pyuvis
+  description: Python tools for Cassini UVIS data
+  repo-url: https://github.com/Cassini-UVIS/pyuvis
+  repo-actions: [issue]
+  navbar:
+    search: true
+    left:
+      - text: Home
+        href: index.ipynb
+      - text: Tutorials
+        href: tutorials/index.qmd
+      - text: API Reference
+        href: reference/index.qmd
+    right:
+      - icon: github
+        aria-label: GitHub
+        href: https://github.com/Cassini-UVIS/pyuvis
+  sidebar:
+    - title: Tutorials
+      style: docked
+      contents:
+        - tutorials/index.qmd
+        - tutorials/01_hsp_sensitivity.ipynb
+        - tutorials/02_idlsav.ipynb
+        - tutorials/03_io.ipynb
+        - tutorials/04_calib_greg.ipynb
+        - tutorials/05_pds.ipynb
+        - tutorials/06_calib_steffl.ipynb
+        - tutorials/07_calib_row2row.ipynb
+        - tutorials/08_stats.ipynb
+    - title: API Reference
+      contents: "{{ contents }}"
+
+format:
+  html:
+    theme:
+      dark: [darkly]
+      light: [flatly]
+    toc: true
+    toc-depth: 3
+    toc-title: Contents
+    toc-location: right
+    code-link: true
+
+metadata-files:
+  - reference/_sidebar.yml
+
+quartodoc:
+  style: pkgdown
+  dir: reference
+  package: pyuvis
+  parser: numpy
+  sidebar: reference/_sidebar.yml
+  title: API Reference
+  sections:
+    - title: I/O and core
+      desc: Reading and writing UVIS data products.
+      contents:
+        - io
+        - idlsav
+        - pds
+        - downloads
+    - title: Calibration
+      desc: Calibration utilities and methods.
+      contents:
+        - hsp_sensitivity
+        - calib.greg
+        - calib.steffl

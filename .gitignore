@@ -49,8 +49,14 @@ coverage.xml
 *.log
 *.pot
 
-# Sphinx documentation
+# Quarto / Sphinx build output
 docs/_build/
+docs/.quarto/
+docs/reference/
+
+# Quarto freeze cache (re-generated; safe to commit selectively if you want)
+.quarto/
+_freeze/
 
 *.sublime-workspace
 

@@ -1,0 +1,145 @@
+PDS_VERSION_ID    = PDS3
+RECORD_TYPE       = STREAM
+OBJECT = TEXT
+  NOTE = "Procedure for HSP Calibration."
+  PUBLICATION_DATE = 2004-09-20
+END_OBJECT = TEXT
+END
+Procedure for HSP Calibration
+Josh Colwell
+September 20, 2004
+
+Background: The UVIS HSP was designed to measure variations in intensity of
+light due to partial or complete occultation of the source (usually a star) by
+intervening material, usually Saturns rings or the atmosphere of Saturn or one
+of its satellites. It was not intended to be an absolute radiometric
+instrument. In a typical observation a background level is measured of the
+unocculted source to get a data level, I0, to which the occulted signal, I, is
+compared. No absolute calibration of I0 in physical units is required for this
+observation, which is the primary mode of operation of the instrument.
+Nevertheless, it is possible to make an approximate estimate of the brightness
+of an object in the FUV from the HSP data rate, provided that there is
+knowledge of the sources spectral shape in the FUV. The procedure for doing
+that is outlined below.
+
+HSP Wavelength Response: The estimated wavelength response for the UVIS HSP is
+shown in Figure 1 and Table 1.
+
+0.20
+
+
+
+
+0.15                       xx xx x
+                       x x   x  x x      x
+                      x            x    x x
+                     x              xxxx   x
+                   x                        x
+0.10              x                         x
+               x                             x
+              x                               x
+             x                                 x
+            x                                   x
+0.05       x                                     x
+           x
+          x
+          x
+          x
+0.00      x
+      |          |          |         |          |          |
+    1000       1200       1400       1600      1800       2000
+
+
+Figure 1: Relative Sensitivity of the HSP detector as a function of wavelength.
+
+Table 1: Relative Sensitivity of the HSP detector as a function of wavelength.
+
+Wavelength (Angstroms) Relative Sensitivity
+1130.00			0.00000
+1140.00			0.0270549
+1150.00			0.0390556
+1160.00			0.0511593
+1170.00			0.0560159
+1180.00			0.0645439
+1190.00			0.0705074
+1200.00			0.0778497
+1210.00			0.0810836
+1220.00			0.0915620
+1230.00			0.0993767
+1240.00			0.102783
+1250.00			0.110385
+1260.00			0.114058
+1270.00			0.118549
+1280.00			0.123220
+1290.00			0.123048
+1300.00			0.121375
+1310.00			0.129776
+1320.00			0.133781
+1330.00			0.140251
+1340.00			0.145286
+1350.00			0.143884
+1360.00			0.147813
+1370.00			0.146146
+1380.00			0.144396
+1390.00			0.150510
+1400.00			0.151467
+1410.00			0.149956
+1420.00			0.145171
+1430.00			0.143898
+1440.00			0.136842
+1450.00			0.144043
+1460.00			0.145993
+1470.00			0.149858
+1480.00			0.149426
+1490.00			0.148534
+1500.00			0.148939
+1510.00			0.149116
+1520.00			0.147436
+1530.00			0.146430
+1540.00			0.152721
+1550.00			0.147942
+1560.00			0.133399
+1570.00			0.132017
+1580.00			0.127328
+1590.00			0.112406
+1600.00			0.118397
+1610.00			0.108828
+1620.00			0.130915
+1630.00			0.122729
+1640.00			0.136309
+1650.00			0.130725
+1660.00			0.131107
+1670.00			0.126259
+1680.00			0.119278
+1690.00			0.109329
+1700.00			0.103477
+1710.00			0.0957879
+1720.00			0.0880108
+1730.00			0.0806759
+1740.00			0.0761473
+1750.00			0.0680325
+1760.00			0.0620168
+1770.00			0.0560484
+1780.00			0.0500040
+1790.00			0.0450547
+1800.00			0.0403837
+
+Radiometric calibration of the HSP is accomplished by comparing the observed
+HSP count rate with the convolution of the HSP relative sensitivity (Table 1)
+and the spectrum of the source object. The ratio of these two numbers (the
+count rate, I, and the scalar product of relative sensitivity, S, and the
+source spectrum, F, gives the HSP scalar calibration factor, f=I/(FS).
+Measurements of stars with known spectra provide independent measures of f.
+With an HSP measurement, I, and the calibration factor f, one can then derive
+the product FS for the source object. Similarly, if one assumes a spectral
+shape for F then one can calculate the absolute magnitude of F from the HSP
+measurement, I, the calibration factor, f, and the relative sensitivity, S.
+Conversely, the predicted count rate, I, is given by I=f*F*S*dlambda, where
+the source spectrum and brightness are known.
+
+With F in units of erg/cm2/sec/A, the HSP scalar calibration factor is
+f = 1.7 x 10^11.  This factor is based on observations of a limited set of
+stars during Cassini cruise to Saturn. Objects with different spectra may
+have different values of f due to uncertainties in the HSP relative
+sensitivity, S.  Also, the HSP may exhibit temperature-dependent and
+time-dependent changes in sensitivity.

@@ -1,37 +1,16 @@
-.ONESHELL:
-SHELL := /bin/bash
-SRC = $(wildcard notebooks/*.ipynb)
+.PHONY: install test docs serve clean
 
-all: pyuvis docs
-
-pyuvis: $(SRC)
-	nbdev_build_lib
-	touch pyuvis
-
-sync:
-	nbdev_update_lib
-
-docs_serve: docs
-	cd docs && bundle exec jekyll serve
-
-docs: $(SRC)
-	nbdev_build_docs
-	touch docs
+install:
+	pip install -e ".[dev,docs]"
 
 test:
-	nbdev_test_nbs
+	pytest
 
-release: pypi conda_release
-	nbdev_bump_version
+docs:
+	cd docs && python -m quartodoc build && cd .. && quarto render docs
 
-conda_release:
-	fastrelease_conda_package --mambabuild --upload_user=michaelaye
-
-pypi: dist
-	twine upload --repository pypi dist/*
-
-dist: clean
-	python setup.py sdist bdist_wheel
+serve:
+	quarto preview docs
 
 clean:
-	rm -rf dist
+	rm -rf dist build *.egg-info docs/_build docs/reference

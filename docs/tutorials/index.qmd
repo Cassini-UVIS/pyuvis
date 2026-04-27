@@ -1,0 +1,18 @@
+---
+title: Tutorials
+---
+
+Worked examples that exercise the public `pyuvis` API. Each notebook stays
+executable in JupyterLab — open one, run it cell-by-cell, and use it as a
+testing ground for new ideas.
+
+| Tutorial | Topic |
+|---|---|
+| [HSP sensitivity](01_hsp_sensitivity.ipynb) | HSP detector sensitivity table and lookups |
+| [IDL .sav file handling](02_idlsav.ipynb) | Reading legacy IDL save files |
+| [Reading UVIS data](03_io.ipynb) | The `UVPDS`, `UVISObs`, and HSP/FUV/EUV reader classes |
+| [Calibration: Greg method](04_calib_greg.ipynb) | Spica/star observations selection |
+| [PDS catalog](05_pds.ipynb) | Working with the PDS catalog |
+| [Calibration: Steffl method](06_calib_steffl.ipynb) | Steffl-style calibration |
+| [Calibration: row-to-row](07_calib_row2row.ipynb) | Row-to-row calibration |
+| [Statistics](08_stats.ipynb) | Quick statistics |
