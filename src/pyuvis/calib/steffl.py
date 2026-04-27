@@ -5,7 +5,6 @@ from functools import cached_property
 
 import matplotlib.pyplot as plt
 import numpy as np
-import param
 from tqdm.auto import tqdm, trange
 
 import pandas as pd
@@ -14,8 +13,12 @@ import xarray as xr
 try:
     import holoviews as hv
     import hvplot.xarray  # noqa: F401  registers .hvplot accessor on xr.DataArray
+    import param
+    _VIZ_AVAILABLE = True
 except ImportError:
-    hv = None  # plotting features require: pip install pyuvis[viz]
+    hv = None
+    param = None
+    _VIZ_AVAILABLE = False  # plotting + Col2Col features require: pip install pyuvis[viz]
 
 from .greg import filter_spica_for_date
 from ..io import UVPDS, UVISObs
@@ -94,7 +97,16 @@ def create_detector_stack(
         name=name,
     )
 
-class Col2Col(param.Parameterized):
+if not _VIZ_AVAILABLE:
+    class Col2Col:
+        """Stub: real Col2Col requires the [viz] extra."""
+        def __init__(self, *args, **kwargs):
+            raise ImportError(
+                "Col2Col requires the optional [viz] extra (param + hvplot). "
+                "Install with: pip install pyuvis[viz]"
+            )
+else:
+  class Col2Col(param.Parameterized):
     pids = param.List(item_type=str, doc="List of product IDs")
     i = param.Integer(bounds=(0, 1023), doc="Spectral column i")
     m = param.Integer(bounds=(0, 13), doc="Scan number m")
