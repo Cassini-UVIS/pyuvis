@@ -46,6 +46,16 @@ docs = ["quartodoc>=0.11.1", "griffe>=1.5,<2", "jupyter", "nbformat"]
 [tool.hatch.build.targets.wheel]
 packages = ["src/pyuvis"]
 
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/pyuvis",
+    "README.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "LICENSE",
+    "pyproject.toml",
+]
+
 [tool.bumpversion]
 current_version = "0.9.0"
 commit = true
