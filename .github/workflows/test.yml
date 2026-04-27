@@ -1,0 +1,44 @@
+name: Tests
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'pyproject.toml'
+      - '.github/workflows/test.yml'
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13', '3.14']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package and dev deps
+        run: pip install -e ".[dev]"
+
+      - name: Smoke import
+        run: |
+          python -c "from pyuvis import UVPDS, UVISObs, HSP, PDSReader; from pyuvis.pds import CatalogFilter; from pyuvis.calib import greg, steffl; print('OK')"
+
+      - name: Run pytest if tests/ exists
+        run: |
+          if [ -d tests ]; then
+            pytest -v
+          else
+            echo "No tests/ directory yet; skipping pytest."
+          fi
