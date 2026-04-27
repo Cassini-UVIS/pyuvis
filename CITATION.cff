@@ -5,6 +5,7 @@ authors:
   - family-names: "Aye"
     given-names: "K.-Michael"
     affiliation: "Freie Universität Berlin"
+    orcid: "https://orcid.org/0000-0002-4088-1928"
 abstract: >-
   Python package providing readers, calibration utilities, and PDS-archive
   helpers for Cassini UVIS (Ultraviolet Imaging Spectrograph) data. Built on
