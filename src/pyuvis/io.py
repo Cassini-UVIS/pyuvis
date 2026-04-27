@@ -11,13 +11,18 @@ from astropy import units as u
 from fastcore.utils import dict2obj
 
 
-import holoviews as hv
-import hvplot.xarray
 import pandas as pd
 import pvl
 import xarray as xr
 from planetarypy.catalog import fetch_product
 from .hsp_sensitivity import sens_df
+
+try:
+    import holoviews as hv
+    import hvplot.xarray  # noqa: F401  registers .hvplot accessor on xr.DataArray
+    hv.config.image_rtol = 0.05
+except ImportError:
+    hv = None  # plotting features require: pip install pyuvis[viz]
 
 try:
     import ffmpy
@@ -27,7 +32,6 @@ except ImportError:
     _FFMPY_INSTALLED = False
 
 xr.set_options(keep_attrs=True)
-hv.config.image_rtol = 0.05
 
 efuv_pid_regex = '[E-F]UV[1-2][0-9][0-9][0-9]_[0-3][0-9][0-9]_[0-2][0-9]_[0-6][0-9]*'
 

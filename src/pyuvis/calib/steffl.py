@@ -8,10 +8,15 @@ import numpy as np
 import param
 from tqdm.auto import tqdm, trange
 
-import holoviews as hv
-import hvplot.xarray  # noqa
 import pandas as pd
 import xarray as xr
+
+try:
+    import holoviews as hv
+    import hvplot.xarray  # noqa: F401  registers .hvplot accessor on xr.DataArray
+except ImportError:
+    hv = None  # plotting features require: pip install pyuvis[viz]
+
 from .greg import filter_spica_for_date
 from ..io import UVPDS, UVISObs
 from ..pds import CatalogFilter

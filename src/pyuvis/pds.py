@@ -4,7 +4,11 @@ from datetime import date as dtdate
 from datetime import timedelta
 from pathlib import Path
 
-import hvplot.pandas  # noqa
+try:
+    import hvplot.pandas  # noqa: F401  registers .hvplot accessor on DataFrame
+except ImportError:
+    pass  # plotting features require: pip install pyuvis[viz]
+
 from planetarypy.datetime_format_converters import fromdoyformat
 from planetarypy.pds import get_index
 

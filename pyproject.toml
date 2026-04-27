@@ -24,7 +24,6 @@ classifiers = [
 dependencies = [
     "pandas>=1.0",
     "xarray>=0.19",
-    "hvplot>=0.7",
     "planetarypy>=0.21",
     "matplotlib>=1.0",
     "seaborn",
@@ -40,8 +39,9 @@ Documentation = "https://cassini-uvis.github.io/pyuvis/"
 Repository = "https://github.com/Cassini-UVIS/pyuvis"
 
 [project.optional-dependencies]
+viz = ["hvplot>=0.7", "holoviews"]
 dev = ["pytest", "pytest-cov", "build", "twine"]
-docs = ["quartodoc>=0.11.1", "griffe>=1.5,<2", "jupyter", "nbformat"]
+docs = ["quartodoc>=0.11.1", "griffe>=1.5,<2", "jupyter", "nbformat", "pyuvis[viz]"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/pyuvis"]
