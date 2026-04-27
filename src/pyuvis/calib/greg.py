@@ -3,7 +3,7 @@ __all__ = ['get_star_obs', 'get_spica_obs', 'filter_spica_for_date']
 from fastcore.utils import Path
 
 import pandas as pd
-from planetarypy.utils import nasa_datetime_to_iso
+from planetarypy.datetime_format_converters import fromdoyformat
 from ..pds import CatalogFilter
 from ..io import UVISObs
 
@@ -18,9 +18,9 @@ def get_star_obs():
 
     star_obs["detector"] = star_obs.filename.str[:3]
     star_obs["filename_time"] = star_obs.filename.map(
-        lambda x: nasa_datetime_to_iso(
+        lambda x: fromdoyformat(
             x[3:20].replace("_", "-", 1).replace("_", "T", 1).replace("_", ":")
-        )
+        ).isoformat()
     )
     star_obs.filename_time = pd.to_datetime(star_obs.filename_time)
     star_obs["date"] = pd.DatetimeIndex(star_obs.filename_time.dt.date)

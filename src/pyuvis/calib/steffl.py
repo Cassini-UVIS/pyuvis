@@ -1,5 +1,6 @@
 __all__ = ['steffl_spica_dates', 'steffl_spica_nasa_dates', 'Row2Row', 'create_detector_stack', 'Col2Col']
 
+import datetime as dt
 from functools import cached_property
 
 import matplotlib.pyplot as plt
@@ -11,15 +12,14 @@ import holoviews as hv
 import hvplot.xarray  # noqa
 import pandas as pd
 import xarray as xr
-from nbverbose.showdoc import show_doc
-from planetarypy.utils import iso_to_nasa_date
 from .greg import filter_spica_for_date
 from ..io import UVPDS, UVISObs
 from ..pds import CatalogFilter
 
-steffl_spica_dates = ["2001-04-3", "2002-07-17", "2003-05-19"]
-steffl_spica_nasa_dates = [iso_to_nasa_date(i) for i in steffl_spica_dates]
-steffl_spica_nasa_dates
+steffl_spica_dates = ["2001-04-03", "2002-07-17", "2003-05-19"]
+steffl_spica_nasa_dates = [
+    dt.date.fromisoformat(d).strftime("%Y-%j") for d in steffl_spica_dates
+]
 
 class Row2Row:
     def __init__(self, pid):

@@ -16,7 +16,7 @@ import hvplot.xarray
 import pandas as pd
 import pvl
 import xarray as xr
-from planetarypy.uvis import get_data_path, get_label_path, get_user_guide
+from planetarypy.catalog import fetch_product
 from .hsp_sensitivity import sens_df
 
 try:
@@ -100,13 +100,18 @@ class UVPDS:
         # The attribute `pid` will carry the shortenend PDS identifier,
         # attribute `uvis_id` will just store what the user came in with.
         uvis_id: str,
-        skip_download: bool = False,
+        skip_download: bool = False,  # retained for backward compat; planetarypy now handles caching
     ):
+        del skip_download
         self.uvis_id = uvis_id
         self.product_id = self.pid = uvis_id[:17]
-        self.path = get_data_path(self.pid, skip_download)
-        if self.path is None:
-            raise FileNotFoundError("No valid data path found.")
+        result = fetch_product("cassini.uvis.edr", self.pid)
+        dat_files = [p for p in result.files if p.suffix == ".DAT"]
+        if len(dat_files) != 1:
+            raise FileNotFoundError(
+                f"Expected exactly one .DAT file for {self.pid}, got {len(dat_files)}"
+            )
+        self.path = dat_files[0]
         self.pds = PDSReader(self.path)
         self.datalabel = self.pds.label
         self.cal_data = None

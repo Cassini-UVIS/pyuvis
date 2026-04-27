@@ -70,7 +70,6 @@ quartodoc:
         - io
         - idlsav
         - pds
-        - downloads
     - title: Calibration
       desc: Calibration utilities and methods.
       contents:

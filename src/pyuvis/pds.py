@@ -4,19 +4,16 @@ from datetime import date as dtdate
 from datetime import timedelta
 from pathlib import Path
 
-from yarl import URL
-
 import hvplot.pandas  # noqa
-from nbverbose.showdoc import show_doc
-from planetarypy.pds.apps import find_indexes, get_index
-from planetarypy import utils
+from planetarypy.datetime_format_converters import fromdoyformat
+from planetarypy.pds import get_index
 
 class CatalogFilter:
     "useful to make class to keep the base catalog in memory"
 
     def __init__(self, date: str = None):
         self.date = date
-        df = get_index("cassini.uvis", "index")
+        df = get_index("cassini.uvis.index")
         df["product_id"] = df.FILE_NAME.map(lambda x: Path(x).stem)
         df["volume"] = df.FILE_NAME.map(lambda x: x.split("/")[1])
         new_cols = ["product_id", "volume"] + list(df.columns)[:-2]
@@ -34,7 +31,7 @@ class CatalogFilter:
         date = value.replace("_", "-")
         tokens = date.split("-")
         if len(tokens) == 2:
-            date = utils.nasa_date_to_datetime(date)
+            date = fromdoyformat(date).date()
         elif len(tokens) == 3:
             tokens = [int(i) for i in tokens]
             date = dtdate(*tokens)
@@ -50,7 +47,7 @@ class CatalogFilter:
 
     @property
     def nasadate(self):
-        return utils.iso_to_nasa_date(self.isodate)
+        return self.date.strftime("%Y-%j")
 
     @property
     def piddate(self):
