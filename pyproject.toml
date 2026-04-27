@@ -24,7 +24,7 @@ classifiers = [
 dependencies = [
     "pandas>=1.0",
     "xarray>=0.19",
-    "planetarypy>=0.21",
+    "planetarypy>=0.55.0",
     "matplotlib>=1.0",
     "seaborn",
     "fastcore",
