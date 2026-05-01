@@ -38,7 +38,6 @@ website:
         - tutorials/05_pds.ipynb
         - tutorials/06_calib_steffl.ipynb
         - tutorials/07_calib_row2row.ipynb
-        - tutorials/08_stats.ipynb
     - title: API Reference
       contents: "{{ contents }}"
 

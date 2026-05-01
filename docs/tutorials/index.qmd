@@ -15,4 +15,3 @@ testing ground for new ideas.
 | [PDS catalog](05_pds.ipynb) | Working with the PDS catalog |
 | [Calibration: Steffl method](06_calib_steffl.ipynb) | Steffl-style calibration |
 | [Calibration: row-to-row](07_calib_row2row.ipynb) | Row-to-row calibration |
-| [Statistics](08_stats.ipynb) | Quick statistics |
