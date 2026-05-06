@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pyuvis"
-version = "0.9.0"
+version = "0.9.1"
 description = "Python tools for Cassini UVIS data"
 readme = "README.md"
 requires-python = ">= 3.12, <4"
@@ -64,7 +64,7 @@ markers = [
 addopts = "-m 'not network'"
 
 [tool.bumpversion]
-current_version = "0.9.0"
+current_version = "0.9.1"
 commit = true
 tag = true
 tag_name = "v{new_version}"
