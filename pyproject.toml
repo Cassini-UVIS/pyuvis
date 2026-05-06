@@ -56,6 +56,13 @@ include = [
     "pyproject.toml",
 ]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "network: tests that download real PDS products via planetarypy (skipped by default; run with `pytest -m network`)",
+]
+addopts = "-m 'not network'"
+
 [tool.bumpversion]
 current_version = "0.9.0"
 commit = true

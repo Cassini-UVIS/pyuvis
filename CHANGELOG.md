@@ -2,6 +2,37 @@
 
 <!-- do not remove -->
 
+## 0.9.1 — Bug fixes + tutorial repair
+
+### Fixes
+- `PDSReader` now handles `OBJECT = SPECTRUM` PDS3 labels (29 such files
+  exist in the UVIS archive — single-integration interplanetary H/He scans
+  like `EUV2004_018_10_08`). SPECTRUM data is surfaced as a degenerate
+  `(binned_bands, 1, 1)` 3-D array so callers can keep treating
+  `PDSReader.data` as 3-D regardless of object type.
+- `PDSReader` accepts `str` paths again (previously crashed with
+  `AttributeError: 'str' object has no attribute 'with_suffix'`).
+- Unsupported PDS object types (e.g. `TIME_SERIES`) now raise a clear
+  `ValueError` naming the supported types and pointing to issue #10.
+- `pyuvis.calib.greg.get_star_obs()` now loads its bundled `stars_list.txt`
+  via `importlib.resources` instead of a hardcoded Linux path; the file
+  ships inside the package (`src/pyuvis/calib/stars_list.txt`).
+
+### Documentation
+- Repaired the Quarto tutorial notebooks under `docs/tutorials/` after the
+  v0.9.0 nbdev-strip removed their imports. Each tutorial now has an
+  explicit `Setup` cell with the imports it needs; data-fetch demo cells
+  are marked `#| eval: false` so the docs site renders cleanly without
+  PDS data on the runner.
+- Dropped `08_stats.ipynb` from the sidebar (single orphan cell with no
+  recoverable content; file kept on disk for later revival).
+
+### Tests
+- Added `tests/test_pdsreader.py` covering the QUBE and SPECTRUM code
+  paths plus the unsupported-type error path. Network tests are gated
+  behind `@pytest.mark.network` and skipped by default; opt in with
+  `pytest -m network`.
+
 ## 0.9.0 — Modernization release (BREAKING)
 
 > ⚠️ **Breaking API changes.** This release reorganizes pyuvis from an
