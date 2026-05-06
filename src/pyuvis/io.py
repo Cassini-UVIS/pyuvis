@@ -47,40 +47,64 @@ class PDSReader:
         datapath: Union[str, Path],  # full path to data
     ):
         self.datapath = Path(datapath)
+        label = dict2obj(pvl.load(self.datapath.with_suffix(".LBL")))
+        self.label = label
 
-        label = dict2obj(pvl.load(datapath.with_suffix(".LBL")))
+        if hasattr(label, "QUBE"):
+            self.data = self._read_qube(label)
+        elif hasattr(label, "SPECTRUM"):
+            self.data = self._read_spectrum(label)
+        else:
+            raise ValueError(
+                "Unsupported PDS data object. PDSReader handles QUBE and "
+                "SPECTRUM types; TIME_SERIES is not yet implemented "
+                "(see https://github.com/Cassini-UVIS/pyuvis/issues/10)."
+            )
 
+    def _read_qube(self, label) -> np.ndarray:
         self.band_range = [
             label.QUBE.UL_CORNER_BAND,
-            label.QUBE.LR_CORNER_BAND + 1,  # for numpy slicing + 1
+            1024 // label.QUBE.BAND_BIN,
         ]
-        try:
-            self.band_range[1] = 1024 // label.QUBE.BAND_BIN
-        except TypeError:
-            raise ValueError("Unsupported data object. See https://github.com/Cassini-UVIS/pyuvis/issues/10")
-
         self.line_range = [
             label.QUBE.UL_CORNER_LINE,
             label.QUBE.LR_CORNER_LINE + 1,  # for numpy slicing + 1
         ]
 
-        # read the data
         # Both the data file and the calibration files contain big-endian values.
         if label.QUBE.CORE_ITEM_TYPE == "MSB_UNSIGNED_INTEGER":
-            data1D = (np.fromfile(str(datapath), ">H")).astype(np.uint16)
+            data1D = np.fromfile(str(self.datapath), ">H").astype(np.uint16)
         elif label.QUBE.CORE_ITEM_TYPE == "IEEE_REAL":
-            data1D = (np.fromfile(str(datapath), ">f4")).astype(np.float32)
+            data1D = np.fromfile(str(self.datapath), ">f4").astype(np.float32)
         else:
-            raise TypeError("Unhandled QUBE data type.  Not yet implemented.")
+            raise TypeError(
+                f"Unhandled QUBE data type {label.QUBE.CORE_ITEM_TYPE!r}."
+            )
 
-        # reshape the data and then slice out the relevant parts
-        data = data1D.reshape(label.QUBE.CORE_ITEMS, order="F")[
+        return data1D.reshape(label.QUBE.CORE_ITEMS, order="F")[
             slice(*self.band_range), slice(*self.line_range), :
         ]
 
-        # store variables
-        self.label = label
-        self.data = data
+    def _read_spectrum(self, label) -> np.ndarray:
+        # SPECTRUM = a 1-D table (ROWS x COLUMNS). For the 29 UVIS files of
+        # this type, BIN_SPATIAL collapses the slit to one pixel and only
+        # one integration was recorded → present it as a degenerate 3-D
+        # array (binned_bands, 1, 1) so callers can treat it like a QUBE.
+        spec = label.SPECTRUM
+        n_bands = 1024 // spec.BIN_SPECTRAL
+        self.band_range = [spec.UL_CORNER_SPECTRAL, n_bands]
+        self.line_range = [spec.UL_CORNER_SPATIAL, spec.LR_CORNER_SPATIAL + 1]
+
+        n_items = int(spec.ROWS) * int(spec.COLUMNS)
+        dtype = spec.COLUMN.DATA_TYPE
+        if dtype == "MSB_UNSIGNED_INTEGER":
+            data1D = np.fromfile(str(self.datapath), ">H", count=n_items).astype(np.uint16)
+        elif dtype == "IEEE_REAL":
+            data1D = np.fromfile(str(self.datapath), ">f4", count=n_items).astype(np.float32)
+        else:
+            raise TypeError(f"Unhandled SPECTRUM data type {dtype!r}.")
+
+        return data1D.reshape(n_bands, 1, 1)
 
 class UVPDS:
     """
