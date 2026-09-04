@@ -145,7 +145,7 @@ class UVPDS:
         self.cal_data = None
 
         # Try to load the calibration Matrix file.  If not present, set to None.
-        if self.cal_label_path.exists() and self.cal_data_path.exists():
+        if self.cal_label_path is not None and self.cal_data_path is not None:
             self.cal_data = PDSReader(self.cal_data_path)
             self.cal_matrix = self.cal_data.data
             self.caliblabel = dict2obj(pvl.load(str(self.cal_label_path)))
@@ -166,14 +166,19 @@ class UVPDS:
         return self.path.with_suffix(".DAT")
 
     @property
-    def cal_label_path(self):
-        p = self.path.parent
-        return max(list(p.glob(f"{self.file_id}_CAL_?.LBL")))
+    def cal_label_path(self) -> Path | None:
+        """Highest-numbered `_CAL_?` label, or None when the product has none.
+
+        `max()` picks the latest calibration version (`_CAL_3` over `_CAL_1`);
+        `default=None` is what keeps an uncalibrated product from raising here
+        instead of falling back to the default wavelengths.
+        """
+        return max(self.path.parent.glob(f"{self.file_id}_CAL_?.LBL"), default=None)
 
     @property
-    def cal_data_path(self):
-        p = self.path.parent
-        return max(list(p.glob(f"{self.file_id}_CAL_?.DAT")))
+    def cal_data_path(self) -> Path | None:
+        """Highest-numbered `_CAL_?` data file, or None when there is none."""
+        return max(self.path.parent.glob(f"{self.file_id}_CAL_?.DAT"), default=None)
 
     @property
     def n_bands(self):
