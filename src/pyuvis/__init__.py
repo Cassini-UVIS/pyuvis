@@ -3,4 +3,4 @@ from .idlsav import *
 from .hsp_sensitivity import *
 from .pds import *
 
-__version__ = "0.9.1"
+__version__ = "0.9.2"
