@@ -2,6 +2,26 @@
 
 <!-- do not remove -->
 
+## 0.9.2 — Uncalibrated products no longer raise
+
+### Fixes
+- `UVPDS` now constructs for products that have no `_CAL_?` calibration
+  files, instead of raising `ValueError: max() iterable argument is empty`.
+  `cal_label_path` / `cal_data_path` called `max()` on a glob result, which
+  raises on an empty sequence — defeating the guard immediately below them,
+  where `__init__` tests `.exists()` intending to fall back to the default
+  wavelengths. The property raised before `.exists()` was reached, so the
+  fallback was unreachable in exactly the case it was written for. Both
+  properties now return `None` when nothing matches, and `__init__` compares
+  against `None`. `max()` is otherwise unchanged: it still selects the
+  highest calibration version, `_CAL_3` over `_CAL_1`.
+
+  Previously masked by an upstream bug: `planetarypy`'s `fetch_product`
+  returned only the `.LBL` for `cassini.uvis.edr`, so `__init__` died one
+  line earlier on "Expected exactly one .DAT file ... got 0". Fixing that
+  (planetarypy 1202d88) moved the failure forward into this one, which is
+  why it surfaces now.
+
 ## 0.9.1 — Bug fixes + tutorial repair
 
 ### Fixes
